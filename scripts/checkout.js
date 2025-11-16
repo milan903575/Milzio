@@ -1,20 +1,22 @@
-import { cart } from '../data/cart.js';
+import { cart, removeFromCart } from '../data/cart.js';
 import { products } from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
 
-let cartSummeryHTML = '';
-cart.forEach((cartItem) => {
-  const productId = cartItem.productId;
+renderCart();
+function renderCart() {
+  let cartSummeryHTML = '';
+  cart.forEach((cartItem, index) => {
+    const productId = cartItem.productId;
 
-  let matchingProduct;
+    let matchingProduct;
 
-  products.forEach((product) => {
-    if (product.id === productId) {
-      matchingProduct = product;
-    }
-  });
-  cartSummeryHTML +=
-    `
+    products.forEach((product) => {
+      if (product.id === productId) {
+        matchingProduct = product;
+      }
+    });
+    cartSummeryHTML +=
+      `
     <div class="cart-item-container">
       <div class="delivery-date">
         Delivery date: Tuesday, June 21
@@ -37,7 +39,7 @@ cart.forEach((cartItem) => {
             <span class="update-quantity-link link-primary">
               Update
             </span>
-            <span class="delete-quantity-link link-primary">
+            <span class="delete-quantity-link link-primary js-delete-quantity-link" data-product-id="${matchingProduct.id}">
               Delete
             </span>
           </div>
@@ -84,6 +86,14 @@ cart.forEach((cartItem) => {
       </div>
     </div>
 `;
-});
+  });
+  document.querySelector('.js-order-summury').innerHTML = cartSummeryHTML;
+}
 
-document.querySelector('.js-order-summury').innerHTML = cartSummeryHTML;
+document.querySelectorAll('.js-delete-quantity-link').forEach((button, index) => {
+  button.addEventListener('click', () => {
+    const productId = button.dataset.productId;
+    removeFromCart(productId);
+    console.log(cart);
+  });
+});
