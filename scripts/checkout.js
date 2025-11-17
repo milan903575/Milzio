@@ -1,6 +1,7 @@
 import { cart, removeFromCart } from '../data/cart.js';
 import { products } from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
+import { totalItemsInCart } from '../data/cart.js'
 
 renderCart();
 function renderCart() {
@@ -36,9 +37,11 @@ function renderCart() {
             <span>
               Quantity: <span class="quantity-label">${cartItem.quantity}</span>
             </span>
-            <span class="update-quantity-link link-primary">
+            <span class="update-quantity-link link-primary js-update-link" data-product-id="${matchingProduct.id}">
               Update
             </span>
+            <input class="quantity-input">
+            <span class="save-quantity-link link-primary">Save</span>
             <span class="delete-quantity-link link-primary js-delete-quantity-link" data-product-id="${matchingProduct.id}">
               Delete
             </span>
@@ -98,5 +101,27 @@ document.querySelectorAll('.js-delete-quantity-link').forEach((button, index) =>
     const container = document.querySelector(`.js-cart-item-container-${productId}`);
 
     container.remove(container);
+    updateCart();
   });
 });
+
+
+
+document.querySelectorAll('.js-update-link')
+  .forEach((link) => {
+    link.addEventListener('click', () => {
+      const productId = link.dataset.productId;
+
+      const container = document.querySelector(`.js-cart-item-container-${productId}`);
+
+      container.classList.add('is-editing-quantity');
+    });
+  });
+
+
+function updateCart() {
+  document.querySelector('.js-checkout-header-middle-section').innerHTML = `
+  Checkout (<a class="return-to-home-link" href="amazon.html">${totalItemsInCart()} items</a>)`;
+}
+
+updateCart();
