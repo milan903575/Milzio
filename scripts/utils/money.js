@@ -3,4 +3,4 @@ export function formatCurrency(priceCents) {
 }
 
 
-export default formatCurrency;
+//export default formatCurrency;
