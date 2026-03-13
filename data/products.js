@@ -11,40 +11,11 @@ export function getProduct(productId) {
 
 export let products = [];
 
-export function loadProductsFetch() {
-  const promise = fetch(
-    'https://supersimplebackend.dev/products')
-    .then((response) => {
-      return response.json();
-    }).then((productData) => {
-      products = productData;
+export async function loadProducts(fun) {
 
-      console.log('load Products');
-    }).catch(() => {
-      console.log('Unexpected error please try again latter');
-    });
-
-  return promise;
-}
-
-
-export function loadProducts(fun) {
-  const xhr = new XMLHttpRequest();
-
-  xhr.addEventListener('load', () => {
-    products = JSON.parse(xhr.response);
-
-    console.log('load Products');
-    fun();
-  });
-
-  xhr.addEventListener('error', (error) => {
-
-    console.log('Unexpected error please try again latter');
-  });
-
-  xhr.open('GET', 'https://supersimplebackend.dev/products');
-  xhr.send();
+  const response = await fetch('https://supersimplebackend.dev/products');
+  products = await response.json();
+  fun();
 }
 
 /*
