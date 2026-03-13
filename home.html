@@ -2,8 +2,7 @@
 <html>
 
 <head>
-  <title>Track Order</title>
-
+  <title>Milzio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,12 +11,10 @@
 
   <link rel="stylesheet" href="styles/shared/general.css">
   <link rel="stylesheet" href="styles/shared/site-header.css">
-  <link rel="stylesheet" href="styles/pages/tracking.css">
+  <link rel="stylesheet" href="styles/pages/home.css">
 </head>
 
 <body>
-
-  <!-- ===== HEADER ===== -->
   <div class="site-header">
 
     <div class="site-header-left-section">
@@ -53,62 +50,22 @@
         <span class="returns-text">Returns</span>
         <span class="orders-text">& Orders</span>
       </a>
+
       <a class="cart-link header-link" href="checkout.html">
-        <svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 40" width="50" height="40" fill="none"
-          stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 4h4l5 18h18l4-12H13" stroke="#ffffff" />
-          <circle cx="21" cy="26" r="2.5" fill="#ffffff" stroke="none" />
-          <circle cx="33" cy="26" r="2.5" fill="#ffffff" stroke="none" />
-        </svg>
-        <div class="cart-quantity">3</div>
+        <img class="cart-icon" src="images/icons/cart-icon.png" alt="Cart">
+        <div class="cart-quantity js-cart-quantity"></div>
         <div class="cart-text">Cart</div>
       </a>
+
     </div>
 
   </div>
 
-  <!-- ===== MAIN CONTENT ===== -->
   <div class="main">
-    <div class="order-tracking">
-
-      <a class="back-to-orders-link link-primary" href="orders.html">
-        View all orders
-      </a>
-
-      <div class="delivery-date">
-        Arriving on Monday, June 13
-      </div>
-
-      <div class="product-info">
-        Black and Gray Athletic Cotton Socks - 6 Pairs
-      </div>
-
-      <div class="product-info">
-        Quantity: 1
-      </div>
-
-      <img class="product-image" src="images/products/athletic-cotton-socks-6-pairs.jpg"
-        alt="Black and Gray Athletic Cotton Socks">
-
-      <div class="progress-labels-container">
-        <div class="progress-label">Preparing</div>
-        <div class="progress-label current-status">Shipped</div>
-        <div class="progress-label">Delivered</div>
-      </div>
-
-      <div class="progress-bar-container">
-        <div class="progress-bar"></div>
-      </div>
-
-    </div>
+    <div class="products-grid js-products-grid"></div>
   </div>
 
-  <script>
-    const url = new URL(window.location.href);
-    console.log(url.searchParams.get('orderId'));
-    console.log(url.searchParams.get('productId'));
-  </script>
-
+  <script type="module" src="scripts/amazon.js"></script>
 </body>
 
 </html>

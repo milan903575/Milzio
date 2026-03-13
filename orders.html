@@ -4,57 +4,76 @@
 <head>
   <title>Orders</title>
 
-  <!-- This code is needed for responsive design to work.
-      (Responsive design = make the website look good on
-      smaller screen sizes like a phone or a tablet). -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Load a font called Roboto from Google Fonts. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <!-- Here are the CSS files for this page. -->
   <link rel="stylesheet" href="styles/shared/general.css">
-  <link rel="stylesheet" href="styles/shared/amazon-header.css">
+  <link rel="stylesheet" href="styles/shared/site-header.css">
   <link rel="stylesheet" href="styles/pages/orders.css">
 </head>
 
 <body>
-  <div class="amazon-header">
-    <div class="amazon-header-left-section">
-      <a href="amazon.html" class="header-link">
-        <img class="amazon-logo" src="images/amazon-logo-white.png">
-        <img class="amazon-mobile-logo" src="images/amazon-mobile-logo-white.png">
+
+  <!-- ===== HEADER ===== -->
+  <div class="site-header">
+
+    <div class="site-header-left-section">
+      <a href="home.html" class="header-link">
+        <!-- Desktop Logo -->
+        <svg class="site-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 36" width="120" height="36">
+          <rect x="0" y="4" width="28" height="28" rx="6" fill="#2563eb" />
+          <path d="M7 18 L14 11 L21 18 L14 25 Z" fill="#ffffff" />
+          <text x="34" y="25" font-family="Arial, sans-serif" font-size="16" font-weight="700"
+            fill="#ffffff">Milzio</text>
+        </svg>
+        <!-- Mobile Logo -->
+        <svg class="site-mobile-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36">
+          <rect width="36" height="36" rx="8" fill="#2563eb" />
+          <path d="M8 18 L18 8 L28 18 L18 28 Z" fill="#ffffff" />
+        </svg>
       </a>
     </div>
 
-    <div class="amazon-header-middle-section">
+    <div class="site-header-middle-section">
       <input class="search-bar" type="text" placeholder="Search">
-
       <button class="search-button">
-        <img class="search-icon" src="images/icons/search-icon.png">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22"
+          fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="16.5" y1="16.5" x2="22" y2="22" />
+        </svg>
       </button>
     </div>
 
-    <div class="amazon-header-right-section">
+    <div class="site-header-right-section">
       <a class="orders-link header-link" href="orders.html">
         <span class="returns-text">Returns</span>
         <span class="orders-text">& Orders</span>
       </a>
-
       <a class="cart-link header-link" href="checkout.html">
-        <img class="cart-icon" src="images/icons/cart-icon.png">
+        <svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 40" width="50" height="40" fill="none"
+          stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 4h4l5 18h18l4-12H13" stroke="#ffffff" />
+          <circle cx="21" cy="26" r="2.5" fill="#ffffff" stroke="none" />
+          <circle cx="33" cy="26" r="2.5" fill="#ffffff" stroke="none" />
+        </svg>
         <div class="cart-quantity">3</div>
         <div class="cart-text">Cart</div>
       </a>
     </div>
+
   </div>
 
+  <!-- ===== MAIN CONTENT ===== -->
   <div class="main">
     <div class="page-title">Your Orders</div>
 
     <div class="orders-grid">
+
+      <!-- ===== ORDER 1 ===== -->
       <div class="order-container">
 
         <div class="order-header">
@@ -68,7 +87,6 @@
               <div>$35.06</div>
             </div>
           </div>
-
           <div class="order-header-right-section">
             <div class="order-header-label">Order ID:</div>
             <div>27cba69d-4c3d-4098-b42d-ac7fa62b7664</div>
@@ -76,26 +94,25 @@
         </div>
 
         <div class="order-details-grid">
-          <div class="product-image-container">
-            <img src="images/products/athletic-cotton-socks-6-pairs.jpg">
-          </div>
 
+          <!-- Product 1 -->
+          <div class="product-image-container">
+            <img src="images/products/athletic-cotton-socks-6-pairs.jpg" alt="Black and Gray Athletic Cotton Socks">
+          </div>
           <div class="product-details">
-            <div class="product-name">
-              Black and Gray Athletic Cotton Socks - 6 Pairs
-            </div>
-            <div class="product-delivery-date">
-              Arriving on: August 15
-            </div>
-            <div class="product-quantity">
-              Quantity: 1
-            </div>
+            <div class="product-name">Black and Gray Athletic Cotton Socks - 6 Pairs</div>
+            <div class="product-delivery-date">Arriving on: August 15</div>
+            <div class="product-quantity">Quantity: 1</div>
             <button class="buy-again-button button-primary">
-              <img class="buy-again-icon" src="images/icons/buy-again.png">
+              <!-- Buy Again Icon -->
+              <svg class="buy-again-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25" height="25"
+                fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10" />
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+              </svg>
               <span class="buy-again-message">Buy it again</span>
             </button>
           </div>
-
           <div class="product-actions">
             <a href="tracking.html?orderId=123&productId=456">
               <button class="track-package-button button-secondary">
@@ -104,26 +121,24 @@
             </a>
           </div>
 
+          <!-- Product 2 -->
           <div class="product-image-container">
-            <img src="images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg">
+            <img src="images/products/adults-plain-cotton-tshirt-2-pack-teal.jpg"
+              alt="Adults Plain Cotton T-Shirt - 2 Pack">
           </div>
-
           <div class="product-details">
-            <div class="product-name">
-              Adults Plain Cotton T-Shirt - 2 Pack
-            </div>
-            <div class="product-delivery-date">
-              Arriving on: August 19
-            </div>
-            <div class="product-quantity">
-              Quantity: 2
-            </div>
+            <div class="product-name">Adults Plain Cotton T-Shirt - 2 Pack</div>
+            <div class="product-delivery-date">Arriving on: August 19</div>
+            <div class="product-quantity">Quantity: 2</div>
             <button class="buy-again-button button-primary">
-              <img class="buy-again-icon" src="images/icons/buy-again.png">
+              <svg class="buy-again-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25" height="25"
+                fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10" />
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+              </svg>
               <span class="buy-again-message">Buy it again</span>
             </button>
           </div>
-
           <div class="product-actions">
             <a href="tracking.html">
               <button class="track-package-button button-secondary">
@@ -131,9 +146,11 @@
               </button>
             </a>
           </div>
+
         </div>
       </div>
 
+      <!-- ===== ORDER 2 ===== -->
       <div class="order-container">
 
         <div class="order-header">
@@ -147,7 +164,6 @@
               <div>$41.90</div>
             </div>
           </div>
-
           <div class="order-header-right-section">
             <div class="order-header-label">Order ID:</div>
             <div>b6b6c212-d30e-4d4a-805d-90b52ce6b37d</div>
@@ -155,26 +171,24 @@
         </div>
 
         <div class="order-details-grid">
-          <div class="product-image-container">
-            <img src="images/products/intermediate-composite-basketball.jpg">
-          </div>
 
+          <!-- Product 3 -->
+          <div class="product-image-container">
+            <img src="images/products/intermediate-composite-basketball.jpg" alt="Intermediate Size Basketball">
+          </div>
           <div class="product-details">
-            <div class="product-name">
-              Intermediate Size Basketball
-            </div>
-            <div class="product-delivery-date">
-              Arriving on: June 17
-            </div>
-            <div class="product-quantity">
-              Quantity: 2
-            </div>
+            <div class="product-name">Intermediate Size Basketball</div>
+            <div class="product-delivery-date">Arriving on: June 17</div>
+            <div class="product-quantity">Quantity: 2</div>
             <button class="buy-again-button button-primary">
-              <img class="buy-again-icon" src="images/icons/buy-again.png">
+              <svg class="buy-again-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="25" height="25"
+                fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10" />
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+              </svg>
               <span class="buy-again-message">Buy it again</span>
             </button>
           </div>
-
           <div class="product-actions">
             <a href="tracking.html">
               <button class="track-package-button button-secondary">
@@ -182,10 +196,14 @@
               </button>
             </a>
           </div>
+
         </div>
       </div>
+
     </div>
   </div>
+
+  <script type="module" src="scripts/orders.js"></script>
 </body>
 
 </html>

@@ -4,29 +4,48 @@
   margin-bottom: 100px;
   padding-left: 30px;
   padding-right: 30px;
-
-  /* margin-left: auto;
-     margin-right auto;
-     Is a trick for centering an element horizontally
-     without needing a container. */
   margin-left: auto;
   margin-right: auto;
+  background-color: #ffffff;
 }
+
 
 .back-to-orders-link {
   display: inline-block;
   margin-bottom: 30px;
+
+  /* Blue back link */
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
 }
+
+.back-to-orders-link::before {
+  content: '← ';
+}
+
+.back-to-orders-link:hover {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
 
 .delivery-date {
   font-size: 25px;
   font-weight: 700;
   margin-bottom: 10px;
+
+  /* Dark navy for delivery date heading */
+  color: #1e3a5f;
 }
+
 
 .product-info {
   margin-bottom: 3px;
+  color: #1e40af;
 }
+
 
 .product-image {
   max-width: 150px;
@@ -35,16 +54,21 @@
   margin-bottom: 50px;
 }
 
+
 .progress-labels-container {
   display: flex;
   justify-content: space-between;
   font-size: 20px;
   font-weight: 500;
   margin-bottom: 15px;
+  color: #64748b;
 }
 
+
 .current-status {
-  color: rgb(6, 125, 98);
+  /* Changed from green to professional blue */
+  color: #2563eb;
+  font-weight: 700;
 }
 
 @media (max-width: 575px) {
@@ -64,18 +88,27 @@
   }
 }
 
+
 .progress-bar-container {
   height: 25px;
   width: 100%;
 
-  border: 1px solid rgb(200, 200, 200);
+  /* Soft blue border instead of grey */
+  border: 1px solid #93c5fd;
   border-radius: 50px;
   overflow: hidden;
+  background-color: #eff6ff;
 }
+
 
 .progress-bar {
   height: 100%;
-  background-color: green;
+
+  /* Blue gradient progress bar instead of solid green */
+  background: linear-gradient(90deg, #2563eb, #60a5fa);
   border-radius: 50px;
   width: 50%;
+
+  /* Smooth animation when progress changes */
+  transition: width 0.5s ease;
 }

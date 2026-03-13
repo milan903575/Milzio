@@ -1,72 +1,80 @@
 body {
   font-family: Roboto, Arial;
   color: rgb(33, 33, 33);
-  /* The <body> element has a default margin of 8px
-     on all sides. This removes the default margins. */
   margin: 0;
+  background-color: #ffffff;
 }
 
-/* <p> elements have a default margin on the top
-   and bottom. This removes the default margins. */
+
 p {
   margin: 0;
 }
+
 
 button {
   cursor: pointer;
 }
 
+
 select {
   cursor: pointer;
 }
 
-input, select, button {
+
+input,
+select,
+button {
   font-family: Roboto, Arial;
 }
 
+
+/* ===== PRIMARY BUTTON ===== */
+/* Changed from Amazon yellow to professional blue */
 .button-primary {
-  color: rgb(33, 33, 33);
-  background-color: rgb(255, 216, 20);
-  border: 1px solid rgb(252, 210, 0);
+  color: #ffffff;
+  background-color: #2563eb;
+  border: 1px solid #1d4ed8;
   border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+  box-shadow: 0 2px 5px rgba(37, 99, 235, 0.3);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .button-primary:hover {
-  background-color: rgb(247, 202, 0);
-  border: 1px solid rgb(242, 194, 0);
+  background-color: #1e40af;
+  border-color: #1e3a8a;
 }
 
 .button-primary:active {
-  background: rgb(255, 216, 20);
-  border-color: rgb(252, 210, 0);
+  background-color: #1e3a5f;
+  border-color: #1e3a5f;
   box-shadow: none;
 }
 
+
+/* ===== SECONDARY BUTTON ===== */
+/* White button with blue border */
 .button-secondary {
-  color: rgb(33, 33, 33);
-  background: white;
-  border: 1px solid rgb(213, 217, 217);
+  color: #2563eb;
+  background: #ffffff;
+  border: 1px solid #2563eb;
   border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+  box-shadow: 0 2px 5px rgba(37, 99, 235, 0.15);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .button-secondary:hover {
-  background-color: rgb(247, 250, 250);
+  background-color: #eff6ff;
 }
 
 .button-secondary:active {
-  background-color: rgb(237, 253, 255);
+  background-color: #dbeafe;
   box-shadow: none;
 }
 
-/* These styles will limit text to 2 lines. Anything
-   beyond 2 lines will be replaced with "..."
-   You can find this code by using an A.I. tool or by
-   searching in Google.
-   https://css-tricks.com/almanac/properties/l/line-clamp/ */
+
+/* ===== TEXT CLAMP ===== */
 .limit-text-to-2-lines {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -74,28 +82,39 @@ input, select, button {
   overflow: hidden;
 }
 
+
+/* ===== LINKS ===== */
 .link-primary {
-  color: rgb(1, 124, 182);
+  color: #2563eb;
   cursor: pointer;
+  transition: color 0.15s ease;
 }
 
 .link-primary:hover {
-  color: rgb(196, 80, 0);
+  /* Slightly darker blue on hover instead of orange */
+  color: #1e40af;
+  text-decoration: underline;
 }
 
-/* Styles for dropdown selectors. */
+
+/* ===== SELECT DROPDOWN ===== */
 select {
-  color: rgb(33, 33, 33);
-  background-color: rgb(240, 240, 240);
-  border: 1px solid rgb(213, 217, 217);
+  color: #1e3a5f;
+  background-color: #f0f6ff;
+  border: 1px solid #93c5fd;
   border-radius: 8px;
   padding: 3px 5px;
   font-size: 15px;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+  box-shadow: 0 2px 5px rgba(37, 99, 235, 0.1);
+  transition: border-color 0.2s ease;
 }
 
+
+/* ===== FOCUS STATES ===== */
 select:focus,
 input:focus {
-  outline: 2px solid rgb(255, 153, 0);
+  /* Changed from orange to professional blue */
+  outline: 2px solid #2563eb;
+  outline-offset: 1px;
 }

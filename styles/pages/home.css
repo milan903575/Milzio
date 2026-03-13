@@ -1,34 +1,22 @@
 .main {
   margin-top: 60px;
+  background-color: #ffffff;
 }
+
 
 .products-grid {
   display: grid;
-
-  /* - In CSS Grid, 1fr means a column will take up the
-       remaining space in the grid.
-     - If we write 1fr 1fr ... 1fr; 8 times, this will
-       divide the grid into 8 columns, each taking up an
-       equal amount of the space.
-     - repeat(8, 1fr); is a shortcut for repeating "1fr"
-       8 times (instead of typing out "1fr" 8 times).
-       repeat(...) is a special property that works with
-       display: grid; */
   grid-template-columns: repeat(8, 1fr);
+  background-color: #ffffff;
 }
 
-/* @media is used to create responsive design (making the
-   website look good on any screen size). This @media
-   means when the screen width is 2000px or less, we
-   will divide the grid into 7 columns instead of 8. */
+
 @media (max-width: 2000px) {
   .products-grid {
     grid-template-columns: repeat(7, 1fr);
   }
 }
 
-/* This @media means when the screen width is 1600px or
-   less, we will divide the grid into 6 columns. */
 @media (max-width: 1600px) {
   .products-grid {
     grid-template-columns: repeat(6, 1fr);
@@ -65,18 +53,32 @@
   }
 }
 
+
 .product-container {
   padding-top: 40px;
   padding-bottom: 25px;
   padding-left: 25px;
   padding-right: 25px;
 
-  border-right: 1px solid rgb(231, 231, 231);
-  border-bottom: 1px solid rgb(231, 231, 231);
+  background-color: #ffffff;
+
+  /* Changed border color to a soft professional blue */
+  border-right: 1px solid #b3cde8;
+  border-bottom: 1px solid #b3cde8;
 
   display: flex;
   flex-direction: column;
+
+  /* Smooth hover transition */
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
+
+/* Hover effect for product cards */
+.product-container:hover {
+  background-color: #f0f6ff;
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.12);
+}
+
 
 .product-image-container {
   display: flex;
@@ -87,18 +89,22 @@
   margin-bottom: 20px;
 }
 
+
 .product-image {
-  /* Images will overflow their container by default. To
-    prevent this, we set max-width and max-height to 100%
-    so they stay inside their container. */
   max-width: 100%;
   max-height: 100%;
 }
 
+
 .product-name {
   height: 40px;
   margin-bottom: 5px;
+
+  /* Professional dark navy for readability */
+  color: #1e3a5f;
+  font-weight: 600;
 }
+
 
 .product-rating-container {
   display: flex;
@@ -106,51 +112,84 @@
   margin-bottom: 10px;
 }
 
+
 .product-rating-stars {
   width: 100px;
   margin-right: 6px;
 }
 
+
 .product-rating-count {
-  color: rgb(1, 124, 182);
+  /* Updated to professional blue */
+  color: #2563eb;
   cursor: pointer;
   margin-top: 3px;
 }
 
+.product-rating-count:hover {
+  color: #1e40af;
+  text-decoration: underline;
+}
+
+
 .product-price {
   font-weight: 700;
   margin-bottom: 10px;
+
+  /* Deep blue for price emphasis */
+  color: #1e3a5f;
 }
+
 
 .product-quantity-container {
   margin-bottom: 17px;
 }
 
+
 .product-spacer {
   flex: 1;
 }
 
+
 .added-to-cart {
-  color: rgb(6, 125, 98);
+  /* Professional teal-blue instead of green */
+  color: #1d6fa4;
   font-size: 16px;
 
   display: flex;
   align-items: center;
   margin-bottom: 8px;
 
-  /* At first, the "Added to cart" message will
-     be invisible. Use JavaScript to change the
-     opacity and make it visible. */
   opacity: 0;
 }
+
 
 .added-to-cart img {
   height: 20px;
   margin-right: 5px;
 }
 
+
 .add-to-cart-button {
   width: 100%;
   padding: 8px;
   border-radius: 50px;
+
+  /* Professional blue button */
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.add-to-cart-button:hover {
+  background-color: #1e40af;
+  transform: scale(1.02);
+}
+
+.add-to-cart-button:active {
+  background-color: #1e3a5f;
+  transform: scale(0.98);
 }
