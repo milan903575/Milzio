@@ -1,16 +1,12 @@
 const router = require('express').Router();
+const controller = require('./user.controller')
 
 
-router.get('/', (req, res) => {
-  res.send('All users');
-});
+router.get('/', controller.getAllUsers);
 
-router.post('/register', (req, res) => {
-  res.json({
-    message: 'Hey data recieved.!',
-    data: req.body
-  });
-});
+router.post('/register', controller.createUser);
+
+router.post('/login', controller.loginUser);
 
 
 
