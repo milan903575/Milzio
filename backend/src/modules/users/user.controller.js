@@ -1,4 +1,7 @@
+const { response } = require('express');
 const service = require('./user.service');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 async function getAllUsers(req, res) {
   const users = await service.getAllUsers();
@@ -7,7 +10,9 @@ async function getAllUsers(req, res) {
 
 async function createUser(req, res) {
   const { name, email, password } = req.body;
-  const user = await service.createUser(name, email, password);
+  const hashPassword = await bcrypt.hash(password, 10);
+
+  const user = await service.createUser(name, email, hashPassword);
   res.status(201).json({
     message: 'User Craeted',
     data: {
@@ -29,15 +34,33 @@ async function loginUser(req, res) {
   }
 
   // password not match
-  if (user.password !== password) {
+  const validPassword = bcrypt.compare(password, user.password)
+  if (!validPassword) {
     return res.status(401).json({
       message: 'Invalid Credentials'
     });
   }
 
-  res.status(200).json({
-    message: 'Login successfull'
-  });
+  try {
+    const token = jwt.sign({
+      id: user.id,
+      email: user.email
+    },
+      process.env.JWT_KEY,
+      {
+        expiresIn: '1h'
+      });
+    return res.status(200).json({
+      message: 'Login successfull',
+      token
+    });
+  }
+  catch (err) {
+    return res.status(500).json({
+      message: 'Server Error'
+    });
+  }
+
 }
 
 module.exports = {
