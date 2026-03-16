@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const logger = require('./src/middleware/logger.middleware');
+
 require('dotenv').config();
 require('./src/config/db');
 const router = require('./src/router');
@@ -8,7 +10,11 @@ const router = require('./src/router');
 
 const port = process.env.PORT || 3001;
 
+
 app.use(express.json());
+
+app.use(logger);
+
 app.use(cors({
   origin: "http://127.0.0.1:5500"
 }));
