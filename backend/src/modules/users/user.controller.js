@@ -1,6 +1,6 @@
 const service = require('./user.service');
 
-async function getAllUsers() {
+async function getAllUsers(req, res) {
   const users = await service.getAllUsers();
   res.status(200).json(users);
 }
@@ -23,14 +23,14 @@ async function loginUser(req, res) {
 
   // user not found
   if (!user) {
-    res.status(401).json({
+    return res.status(401).json({
       message: 'Invalid Credentials'
     });
   }
 
   // password not match
   if (user.password !== password) {
-    res.status(401).json({
+    return res.status(401).json({
       message: 'Invalid Credentials'
     });
   }
