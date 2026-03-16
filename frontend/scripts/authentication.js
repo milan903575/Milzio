@@ -38,10 +38,10 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
   const data = await res.json();
 
-  document.getElementById("message").innerText = data.message;
-
-  // save token
-  if (data.token) {
+  // save token and redirect
+  if (res.ok) {
     localStorage.setItem("token", data.token);
+    window.location.href = '../../frontend/profile.html'
   }
+
 });

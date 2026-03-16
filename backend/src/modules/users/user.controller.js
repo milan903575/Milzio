@@ -8,6 +8,16 @@ async function getAllUsers(req, res) {
   res.status(200).json(users);
 }
 
+async function getUser(req, res) {
+  const { name, email } = req.user;
+  return res.status(200).json({
+    message: 'profile fetched',
+    name,
+    email
+  });
+
+}
+
 async function createUser(req, res) {
   const { name, email, password } = req.body;
   const hashPassword = await bcrypt.hash(password, 10);
@@ -43,8 +53,9 @@ async function loginUser(req, res) {
 
   try {
     const token = jwt.sign({
-      id: user.id,
-      email: user.email
+      name: user.name,
+      email: user.email,
+      role: user.role
     },
       process.env.JWT_KEY,
       {
@@ -65,6 +76,7 @@ async function loginUser(req, res) {
 
 module.exports = {
   getAllUsers,
+  getUser,
   createUser,
   loginUser
 };
