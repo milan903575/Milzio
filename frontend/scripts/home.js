@@ -12,7 +12,7 @@ function renderProductsGrid() {
     productsHTML += `
         <div class="product-container">
         <div class="product-image-container">
-          <img class="product-image" src="${product.image}">
+          <img class="product-image" src="http://localhost:3000${product.image}">
         </div>
 
         <div class="product-name limit-text-to-2-lines">
@@ -20,14 +20,14 @@ function renderProductsGrid() {
         </div>
 
         <div class="product-rating-container">
-          <img class="product-rating-stars" src="images/ratings/rating-${product.rating.stars * 10}.png">
+          <img class="product-rating-stars" src="images/ratings/rating-${Math.round(product.rating_stars * 2) * 5}.png">
           <div class="product-rating-count link-primary">
-            ${product.rating.counts}
+            ${product.rating_count}
           </div>
         </div>
 
         <div class="product-price">
-          ₹${formatCurrency(product.priceCents)}
+          ${formatCurrency(product.price_cents)}
         </div>
 
         <div class="product-quantity-container">
@@ -61,6 +61,7 @@ function renderProductsGrid() {
   });
 
 
+  console.log(products)
   document.querySelector('.js-products-grid').innerHTML = productsHTML;
 
   updateCartQuantity();

@@ -13,7 +13,7 @@ export let products = [];
 
 export async function loadProducts(fun) {
 
-  const response = await fetch('https://supersimplebackend.dev/products');
+  const response = await fetch('http://localhost:3000/api/products/');
   products = await response.json();
   fun();
 }
