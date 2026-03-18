@@ -1,24 +1,15 @@
 import { renderOrderSummary } from './checkout/orderSummary.js';
 import { renderPaymentSummary } from './checkout/paymentSummary.js';
-import { loadCartFetch, loadFromStorage } from '../data/cart.js';
 import { loadProducts } from '../data/products.js';
 
-
 async function loadPage() {
-
   try {
-    //throw 'Error1';
-
     await loadProducts();
-
-    await loadCartFetch();
+    renderOrderSummary();
+    renderPaymentSummary();
   } catch (error) {
-    console.log(error);
+    console.log('Page load failed:', error);
   }
-
-  renderOrderSummary();
-  renderPaymentSummary();
 }
 
 loadPage();
-

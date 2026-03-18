@@ -2,7 +2,7 @@ export function getProduct(productId) {
   let matchingProduct;
 
   products.forEach((product) => {
-    if (product.id === productId) {
+    if (product.id === Number(productId)) {
       matchingProduct = product;
     }
   });
@@ -11,10 +11,7 @@ export function getProduct(productId) {
 
 export let products = [];
 
-export async function loadProducts(fun) {
-
+export async function loadProducts() {
   const response = await fetch('http://localhost:3000/api/products/');
   products = await response.json();
-  fun();
 }
-

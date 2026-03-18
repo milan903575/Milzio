@@ -1,25 +1,25 @@
+/* ============================================
+   styles/shared/site-header.css
+   ============================================ */
+
 .site-header {
-  background-color: #1e3a5f;
+  background-color: #000000;
   color: white;
   padding-left: 15px;
   padding-right: 15px;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: relative;
   height: 60px;
-
-  box-shadow: 0 2px 8px rgba(30, 58, 95, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  width: 100%;
 }
-
 
 .site-header-left-section {
   width: 180px;
+  flex-shrink: 0;
 }
 
 @media (max-width: 800px) {
@@ -28,22 +28,20 @@
   }
 }
 
-
 .header-link {
   display: inline-block;
   padding: 6px;
   border-radius: 2px;
   cursor: pointer;
   text-decoration: none;
-  border: 1px solid rgba(0, 0, 0, 0);
+  border: 1px solid transparent;
   color: #ffffff;
   transition: border 0.15s ease;
 }
 
 .header-link:hover {
-  border: 1px solid #93c5fd;
+  border: 1px solid #555555;
 }
-
 
 /* Desktop Logo */
 .site-logo {
@@ -68,7 +66,6 @@
   }
 }
 
-
 .site-header-middle-section {
   flex: 1;
   max-width: 850px;
@@ -78,34 +75,38 @@
   align-items: center;
 }
 
-
 .search-bar {
   flex: 1;
   width: 0;
-  font-size: 16px;
-  height: 40px;
+  font-size: 15px;
+  height: 38px;
   box-sizing: border-box;
-  padding-left: 15px;
-  border: 2px solid #2563eb;
+  padding-left: 14px;
+  border: 1.5px solid #333333;
   border-right: none;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   outline: none;
-  color: #1e3a5f;
+  background: #ffffff;
+  color: #000000;
+  transition: border-color 0.2s;
 }
 
 .search-bar:focus {
-  border-color: #1e40af;
+  border-color: #000000;
 }
 
+.search-bar::placeholder {
+  color: #999999;
+}
 
 .search-button {
-  background-color: #2563eb;
+  background-color: #333333;
   border: none;
-  width: 45px;
-  height: 40px;
+  width: 44px;
+  height: 38px;
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
   flex-shrink: 0;
@@ -117,44 +118,35 @@
 }
 
 .search-button:hover {
-  background-color: #1e40af;
+  background-color: #555555;
 }
-
-
-.search-icon {
-  height: 22px;
-  margin-left: 2px;
-  margin-top: 0;
-}
-
 
 .site-header-right-section {
   width: 180px;
   flex-shrink: 0;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
   gap: 8px;
 }
-
 
 .orders-link {
   color: #ffffff;
 }
 
 .orders-link:hover .orders-text {
-  color: #93c5fd;
+  color: #cccccc;
 }
 
 .returns-text {
   display: block;
-  font-size: 13px;
-  color: #bfdbfe;
+  font-size: 12px;
+  color: #aaaaaa;
 }
 
 .orders-text {
   display: block;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: #ffffff;
 }
@@ -164,28 +156,34 @@
   display: flex;
   align-items: center;
   position: relative;
+  gap: 4px;
 }
-
-.cart-icon {
-  width: 50px;
-}
-
 
 .cart-text {
-  margin-top: 12px;
   font-size: 14px;
   font-weight: 700;
   color: #ffffff;
+  margin-top: 10px;
 }
 
 .cart-quantity {
-  color: #60a5fa;
-  font-size: 14px;
+  color: #ffffff;
+  font-size: 13px;
   font-weight: 700;
-
   position: absolute;
-  top: 16px;
-  left: 22px;
-  width: 26px;
-  text-align: center;
+  top: -2px;
+  left: 14px;
+  background: #e53e3e;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
+.cart-icon {
+  width: 24px;
+  height: 24px;
 }

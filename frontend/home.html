@@ -1,71 +1,141 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <title>Milzio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Cloudflare Iconify for icons -->
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 
   <link rel="stylesheet" href="styles/shared/general.css">
   <link rel="stylesheet" href="styles/shared/site-header.css">
   <link rel="stylesheet" href="styles/pages/home.css">
+  <link rel="stylesheet" href="styles/pages/chat.css">
 </head>
 
 <body>
-  <div class="site-header">
 
-    <div class="site-header-left-section">
-      <a href="home.html" class="header-link">
-        <!-- Desktop Logo -->
-        <svg class="site-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 36" width="120" height="36">
-          <rect x="0" y="4" width="28" height="28" rx="6" fill="#2563eb" />
-          <path d="M7 18 L14 11 L21 18 L14 25 Z" fill="#ffffff" />
-          <text x="34" y="25" font-family="Arial, sans-serif" font-size="16" font-weight="700"
-            fill="#ffffff">Milzio</text>
-        </svg>
-        <!-- Mobile Logo -->
-        <svg class="site-mobile-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36">
-          <rect width="36" height="36" rx="8" fill="#2563eb" />
-          <path d="M8 18 L18 8 L28 18 L18 28 Z" fill="#ffffff" />
-        </svg>
-      </a>
+  <div class="page-layout">
+
+    <!-- LEFT COLUMN -->
+    <div class="products-column">
+
+      <!-- HEADER — left side only -->
+      <div class="site-header">
+        <div class="site-header-left-section">
+          <a href="home.html" class="header-link">
+            <svg class="site-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 36" width="120" height="36">
+              <rect x="0" y="4" width="28" height="28" rx="6" fill="#ffffff" />
+              <path d="M7 18 L14 11 L21 18 L14 25 Z" fill="#000000" />
+              <text x="34" y="25" font-family="Arial,sans-serif" font-size="16" font-weight="700"
+                fill="#ffffff">Milzio</text>
+            </svg>
+            <svg class="site-mobile-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36">
+              <rect width="36" height="36" rx="8" fill="#ffffff" />
+              <path d="M8 18 L18 8 L28 18 L18 28 Z" fill="#000000" />
+            </svg>
+          </a>
+        </div>
+
+        <div class="site-header-middle-section">
+          <input class="search-bar" type="text" placeholder="Search products or ask AI...">
+          <button class="search-button">
+            <iconify-icon icon="mdi:magnify" width="22" height="22" style="color:#ffffff"></iconify-icon>
+          </button>
+        </div>
+
+        <div class="site-header-right-section">
+          <a class="orders-link header-link" href="orders.html">
+            <span class="returns-text">Returns</span>
+            <span class="orders-text">&amp; Orders</span>
+          </a>
+          <a class="cart-link header-link" href="checkout.html">
+            <iconify-icon icon="mdi:cart-outline" width="28" height="28" style="color:#ffffff"></iconify-icon>
+            <div class="cart-quantity js-cart-quantity"></div>
+            <div class="cart-text">Cart</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- SCROLLABLE PRODUCTS -->
+      <div class="products-panel">
+        <div class="main">
+          <div class="products-grid js-products-grid"></div>
+        </div>
+      </div>
+
     </div>
 
-    <div class="site-header-middle-section">
-      <input class="search-bar" type="text" placeholder="Search">
-      <button class="search-button">
-        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22"
-          fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="7" />
-          <line x1="16.5" y1="16.5" x2="22" y2="22" />
-        </svg>
-      </button>
+    <!-- DIVIDER -->
+    <div class="layout-divider"></div>
+
+    <!-- RIGHT COLUMN — AI CHAT -->
+    <div class="chat-panel">
+
+      <div class="chat-header">
+        <div class="ai-avatar">
+          <iconify-icon icon="mdi:robot-outline" width="22" height="22" style="color:#000000"></iconify-icon>
+        </div>
+        <div class="chat-header-info">
+          <div class="chat-name">Milzio AI</div>
+          <div class="chat-status">
+            <span class="status-dot"></span> Online &middot; Always ready
+          </div>
+        </div>
+        <div class="chat-badge">AI POWERED</div>
+      </div>
+
+      <div class="chat-suggestions">
+        <div class="suggestion-chip" onclick="chipSend(this)">
+          <iconify-icon icon="mdi:lightbulb-outline" width="13"></iconify-icon> Best picks under &#x20B9;5k
+        </div>
+        <div class="suggestion-chip" onclick="chipSend(this)">
+          <iconify-icon icon="mdi:fire" width="13"></iconify-icon> Top deals
+        </div>
+        <div class="suggestion-chip" onclick="chipSend(this)">
+          <iconify-icon icon="mdi:package-variant" width="13"></iconify-icon> Track order
+        </div>
+        <div class="suggestion-chip" onclick="chipSend(this)">
+          <iconify-icon icon="mdi:compare" width="13"></iconify-icon> Compare
+        </div>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="msg bot">
+          <div class="msg-avatar">
+            <iconify-icon icon="mdi:robot-outline" width="14" style="color:#ffffff"></iconify-icon>
+          </div>
+          <div>
+            <div class="msg-bubble">
+              Hey! I'm <strong>Milzio AI</strong>, your smart shopping assistant.<br><br>
+              Ask me anything — find products, compare specs, track orders, or get recommendations.
+            </div>
+            <div class="msg-time">Just now</div>
+          </div>
+        </div>
+
+        <!-- typing indicator injected dynamically by chat.js -->
+      </div>
+
+      <div class="chat-input-area">
+        <div class="chat-input-row">
+          <textarea class="chat-textarea" id="chatInput" rows="1"
+            placeholder="Ask about products, deals, orders..."></textarea>
+          <button class="send-btn" onclick="sendMessage()">
+            <iconify-icon icon="mdi:send" width="16" style="color:#ffffff"></iconify-icon>
+          </button>
+        </div>
+        <div class="input-hint">Milzio AI &middot; Powered by your store data</div>
+      </div>
+
     </div>
-
-    <div class="site-header-right-section">
-      <a class="orders-link header-link" href="orders.html">
-        <span class="returns-text">Returns</span>
-        <span class="orders-text">& Orders</span>
-      </a>
-
-      <a class="cart-link header-link" href="checkout.html">
-        <img class="cart-icon" src="images/icons/cart-icon.png" alt="Cart">
-        <div class="cart-quantity js-cart-quantity"></div>
-        <div class="cart-text">Cart</div>
-      </a>
-
-    </div>
-
-  </div>
-
-  <div class="main">
-    <div class="products-grid js-products-grid"></div>
   </div>
 
   <script type="module" src="scripts/home.js"></script>
+  <script src="scripts/chat.js"></script>
 </body>
 
 </html>
