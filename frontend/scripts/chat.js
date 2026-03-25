@@ -1,79 +1,140 @@
-// scripts/chat.js
+const API_URL = 'http://localhost:3000/api/MilzioAI/chat';
+const USER_ID = 1;
 
-const dummyReplies = [
-  "Sure! Let me find the best options for you right now.",
-  "Great question! Based on ratings and reviews, here are my top picks.",
-  "That item is in stock and ships within 2 business days.",
-  "I found a few matches across our catalog — here's what stands out.",
-  "Happy to help! Here's what I recommend based on your budget."
-];
+let isSending = false;
 
-function getBotAvatar() {
-  return `<div class="msg-avatar"><iconify-icon icon="mdi:robot-outline" width="14" style="color:#ffffff"></iconify-icon></div>`;
-}
+async function sendMessage(text) {
+  if (isSending) return;
 
-function getUserAvatar() {
-  return `<div class="msg-avatar"><iconify-icon icon="mdi:account" width="14" style="color:#ffffff"></iconify-icon></div>`;
-}
-
-function sendMessage(text) {
   const input = document.getElementById('chatInput');
   const msg = text || input.value.trim();
   if (!msg) return;
 
+  isSending = true;
+
+  if (!text) {
+    input.value = '';
+    input.style.height = 'auto';
+  }
+
+  appendMessage('user', msg);
+  const { bubble } = appendStreamingMessage();
+
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg, userId: USER_ID })
+    });
+
+    if (!response.ok) throw new Error(`Server error: ${response.status}`);
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    bubble.textContent = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+
+      const parts = buffer.split('\n\n');
+      buffer = parts.pop();
+
+      for (const part of parts) {
+        const line = part.trim();
+        if (!line || line.startsWith(':')) continue;
+
+        if (line.includes('[DONE]')) return;
+
+        if (line.startsWith('data: ')) {
+          const token = line.slice(6).replace(/\\n/g, '\n');
+          bubble.textContent += token;
+          scrollToBottom();
+        }
+      }
+    }
+
+  } catch (err) {
+    bubble.textContent = 'Sorry, something went wrong. Please try again.';
+    console.error('Chat error:', err);
+  } finally {
+    isSending = false;
+  }
+}
+
+function scrollToBottom() {
+  const messages = document.getElementById('chatMessages');
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function appendMessage(role, text) {
+  const messages = document.getElementById('chatMessages');
+  const isUser = role === 'user';
+
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+  div.innerHTML = `
+    <div class="msg-avatar">
+      <iconify-icon icon="${isUser ? 'mdi:account' : 'mdi:robot-outline'}" width="14" style="color:#ffffff"></iconify-icon>
+    </div>
+    <div>
+      <div class="msg-bubble">${text}</div>
+      <div class="msg-time">Just now</div>
+    </div>`;
+
+  messages.appendChild(div);
+  scrollToBottom();
+}
+
+function appendStreamingMessage() {
   const messages = document.getElementById('chatMessages');
 
-  // Add user message
-  const userBubble = `
-    <div class="msg user">
-      ${getUserAvatar()}
-      <div>
-        <div class="msg-bubble">${msg}</div>
-        <div class="msg-time">Just now</div>
-      </div>
-    </div>`;
-  messages.insertAdjacentHTML('beforeend', userBubble);
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  bubble.textContent = '...';
 
-  if (!text) { input.value = ''; input.style.height = 'auto'; }
-  messages.scrollTop = messages.scrollHeight;
+  const time = document.createElement('div');
+  time.className = 'msg-time';
+  time.textContent = 'Just now';
 
-  // Show typing indicator temporarily
-  const typingId = 'typing-' + Date.now();
-  const typingBubble = `
-    <div class="msg bot" id="${typingId}">
-      ${getBotAvatar()}
-      <div class="typing-wrap">
-        <span></span><span></span><span></span>
-      </div>
-    </div>`;
-  messages.insertAdjacentHTML('beforeend', typingBubble);
-  messages.scrollTop = messages.scrollHeight;
+  const wrapper = document.createElement('div');
+  wrapper.appendChild(bubble);
+  wrapper.appendChild(time);
 
-  // Remove typing and add real reply after delay
-  setTimeout(() => {
-    const typingEl = document.getElementById(typingId);
-    if (typingEl) typingEl.remove();
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar';
+  avatar.innerHTML = `<iconify-icon icon="mdi:robot-outline" width="14" style="color:#ffffff"></iconify-icon>`;
 
-    const reply = dummyReplies[Math.floor(Math.random() * dummyReplies.length)];
-    const botBubble = `
-      <div class="msg bot">
-        ${getBotAvatar()}
-        <div>
-          <div class="msg-bubble">${reply}</div>
-          <div class="msg-time">Just now</div>
-        </div>
-      </div>`;
-    messages.insertAdjacentHTML('beforeend', botBubble);
-    messages.scrollTop = messages.scrollHeight;
-  }, 1100);
+  const div = document.createElement('div');
+  div.className = 'msg bot';
+  div.appendChild(avatar);
+  div.appendChild(wrapper);
+
+  messages.appendChild(div);
+  scrollToBottom();
+
+  return { bubble };
 }
 
-function chipSend(el) {
-  sendMessage(el.textContent.trim());
-}
+document.querySelectorAll('.suggestion-chip').forEach(chip => {
+  chip.addEventListener('click', () => sendMessage(chip.dataset.msg));
+});
+
+document.querySelector('.send-btn').addEventListener('click', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  sendMessage();
+});
 
 document.getElementById('chatInput').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
 });
 
 document.getElementById('chatInput').addEventListener('input', function () {

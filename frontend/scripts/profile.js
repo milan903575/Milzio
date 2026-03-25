@@ -7,7 +7,7 @@ if (!token) {
 const API_URL = "http://localhost:3000";
 
 // Fetch logged in user data
-fetch(`${API_URL}/users/profile`, {
+fetch(`${API_URL}/api/users/profile`, {
   method: "GET",
   headers: {
     "Authorization": `Bearer ${token}`

@@ -89,18 +89,19 @@
       </div>
 
       <div class="chat-suggestions">
-        <div class="suggestion-chip" onclick="chipSend(this)">
+        <div class="suggestion-chip" data-msg="Best picks under ₹5k">
           <iconify-icon icon="mdi:lightbulb-outline" width="13"></iconify-icon> Best picks under &#x20B9;5k
         </div>
-        <div class="suggestion-chip" onclick="chipSend(this)">
+        <div class="suggestion-chip" data-msg="Top deals">
           <iconify-icon icon="mdi:fire" width="13"></iconify-icon> Top deals
         </div>
-        <div class="suggestion-chip" onclick="chipSend(this)">
+        <div class="suggestion-chip" data-msg="Track order">
           <iconify-icon icon="mdi:package-variant" width="13"></iconify-icon> Track order
         </div>
-        <div class="suggestion-chip" onclick="chipSend(this)">
+        <div class="suggestion-chip" data-msg="Compare products">
           <iconify-icon icon="mdi:compare" width="13"></iconify-icon> Compare
         </div>
+
       </div>
 
       <div class="chat-messages" id="chatMessages">
@@ -124,7 +125,7 @@
         <div class="chat-input-row">
           <textarea class="chat-textarea" id="chatInput" rows="1"
             placeholder="Ask about products, deals, orders..."></textarea>
-          <button class="send-btn" onclick="sendMessage()">
+          <button class="send-btn" type="button">
             <iconify-icon icon="mdi:send" width="16" style="color:#ffffff"></iconify-icon>
           </button>
         </div>
