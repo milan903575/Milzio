@@ -7,7 +7,7 @@ function getAllUsers() {
 
 function getUserByEmail(email) {
   const stmt = db.prepare(`
-    select name, email, password 
+    select id, name, email, password 
     from users
     where email = ?
     `);

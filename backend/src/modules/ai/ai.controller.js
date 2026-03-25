@@ -1,7 +1,8 @@
 const service = require('./ai.service');
 
 async function chat(req, res) {
-  const { message, userId } = req.body;
+  const { message } = req.body;
+  const userId = req.user.id;
 
   if (!message || !userId) {
     return res.status(400).json({ message: 'Message and userId are required' });

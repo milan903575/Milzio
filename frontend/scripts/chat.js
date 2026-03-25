@@ -1,5 +1,4 @@
-const API_URL = 'http://localhost:3000/api/MilzioAI/chat';
-const USER_ID = 1;
+import { API_BASE } from "./utils/config.js";
 
 let isSending = false;
 
@@ -20,11 +19,17 @@ async function sendMessage(text) {
   appendMessage('user', msg);
   const { bubble } = appendStreamingMessage();
 
+  const token = localStorage.getItem('token');
   try {
-    const response = await fetch(API_URL, {
+    const response = await fetch(`${API_BASE}/api/MilzioAI/chat`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: msg, userId: USER_ID })
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        message: msg,
+      })
     });
 
     if (!response.ok) throw new Error(`Server error: ${response.status}`);

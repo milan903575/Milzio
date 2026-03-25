@@ -9,6 +9,7 @@ async function getUser(req, res) {
   const { name, email } = req.user;
   res.status(200).json({
     message: 'Profile fetched',
+    name,
     email
   });
 }
