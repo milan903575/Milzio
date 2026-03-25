@@ -1,5 +1,4 @@
 const service = require('./ai.service');
-const repository = require('./ai.repository');
 
 async function chat(req, res) {
   const { message, userId } = req.body;
@@ -15,12 +14,7 @@ async function chat(req, res) {
   res.flushHeaders();
 
   try {
-    const rawHistory = repository.getRecentHistory(userId, 6);
-    const history = rawHistory.reverse();
-    repository.saveMessage(userId, 'user', message);
-
-    const fullResponse = await service.chat(message, history, res);
-    repository.saveMessage(userId, 'assistant', fullResponse);
+    await service.chat(message, userId, res);
 
     res.write('event: done\ndata: [DONE]\n\n');
     res.end();
