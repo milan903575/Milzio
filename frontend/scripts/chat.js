@@ -64,7 +64,7 @@ async function sendMessage(text) {
     }
 
   } catch (err) {
-    bubble.textContent = 'Sorry, something went wrong. Please try again.';
+    bubble.textContent = 'Sorry, something went wrong. Please try again. Please Make Sure You Logged In to Chat';
     console.error('Chat error:', err);
   } finally {
     isSending = false;

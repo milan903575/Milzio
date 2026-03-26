@@ -41,7 +41,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   // save token and redirect
   if (res.ok) {
     localStorage.setItem("token", data.token);
-    window.location.href = '../../frontend/profile.html'
+    window.location.href = '../profile.html'
   }
 
 });

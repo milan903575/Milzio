@@ -17,6 +17,14 @@ fetch(`${API_URL}/api/users/profile`, {
   .then(data => {
     const user = data;
 
+    // Check if name or email is undefined
+    if (!user || !user.name || !user.email) {
+      document.getElementById("profileName").innerText = "You are not logged in";
+      document.getElementById("profileEmail").innerText = "";
+      document.getElementById("avatar").innerText = "?";
+      return;
+    }
+
     document.getElementById("profileName").innerText = user.name;
     document.getElementById("profileEmail").innerText = user.email;
 
