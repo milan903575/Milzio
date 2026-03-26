@@ -1,13 +1,11 @@
+import { API_BASE } from "./utils/config.js";
+
 const token = localStorage.getItem("token");
 
-if (!token) {
-  window.location = "authentication.html";
-}
-
-const API_URL = "http://localhost:3000";
+const logoutBtn = document.querySelector(".logout");
 
 // Fetch logged in user data
-fetch(`${API_URL}/api/users/profile`, {
+fetch(`${API_BASE}/api/users/profile`, {
   method: "GET",
   headers: {
     "Authorization": `Bearer ${token}`
@@ -17,19 +15,25 @@ fetch(`${API_URL}/api/users/profile`, {
   .then(data => {
     const user = data;
 
-    // Check if name or email is undefined
+    // If user not valid
     if (!user || !user.name || !user.email) {
-      document.getElementById("profileName").innerText = "You are not logged in";
-      document.getElementById("profileEmail").innerText = "";
+      document.getElementById("profileName").innerText = "Get started";
+      document.getElementById("profileEmail").innerText = "Log in or sign up to access AI chat.";
       document.getElementById("avatar").innerText = "?";
+
+      // Change button to Login
+      logoutBtn.innerText = "Login / Signup";
+      logoutBtn.onclick = logout;
+
       return;
     }
 
+    // Logged in user
     document.getElementById("profileName").innerText = user.name;
     document.getElementById("profileEmail").innerText = user.email;
-
-    // Show first letter of name as avatar
     document.getElementById("avatar").innerText = user.name.charAt(0).toUpperCase();
+
+    logoutBtn.innerText = "Logout";
   });
 
 function logout() {

@@ -9,13 +9,11 @@
   background-color: #ffffff;
 }
 
-
 .back-to-orders-link {
   display: inline-block;
   margin-bottom: 30px;
 
-  /* Blue back link */
-  color: #2563eb;
+  color: #555555;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease;
@@ -26,26 +24,22 @@
 }
 
 .back-to-orders-link:hover {
-  color: #1e40af;
+  color: #000000;
   text-decoration: underline;
 }
-
 
 .delivery-date {
   font-size: 25px;
   font-weight: 700;
   margin-bottom: 10px;
 
-  /* Dark navy for delivery date heading */
-  color: #1e3a5f;
+  color: #111111;
 }
-
 
 .product-info {
   margin-bottom: 3px;
-  color: #1e40af;
+  color: #555555;
 }
-
 
 .product-image {
   max-width: 150px;
@@ -54,20 +48,17 @@
   margin-bottom: 50px;
 }
 
-
 .progress-labels-container {
   display: flex;
   justify-content: space-between;
   font-size: 20px;
   font-weight: 500;
   margin-bottom: 15px;
-  color: #64748b;
+  color: #999999;
 }
 
-
 .current-status {
-  /* Changed from green to professional blue */
-  color: #2563eb;
+  color: #000000;
   font-weight: 700;
 }
 
@@ -88,27 +79,22 @@
   }
 }
 
-
 .progress-bar-container {
   height: 25px;
   width: 100%;
 
-  /* Soft blue border instead of grey */
-  border: 1px solid #93c5fd;
+  border: 1px solid #cccccc;
   border-radius: 50px;
   overflow: hidden;
-  background-color: #eff6ff;
+  background-color: #f5f5f5;
 }
-
 
 .progress-bar {
   height: 100%;
 
-  /* Blue gradient progress bar instead of solid green */
-  background: linear-gradient(90deg, #2563eb, #60a5fa);
+  background: linear-gradient(90deg, #000000, #555555);
   border-radius: 50px;
   width: 50%;
 
-  /* Smooth animation when progress changes */
   transition: width 0.5s ease;
 }

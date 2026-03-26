@@ -9,14 +9,12 @@
   background-color: #ffffff;
 }
 
-
 .page-title {
   font-weight: 700;
   font-size: 22px;
   margin-bottom: 18px;
-  color: #1e3a5f;
+  color: #111111;
 }
-
 
 .checkout-grid {
   display: grid;
@@ -35,11 +33,9 @@
   }
 }
 
-
 .cart-item-container,
 .payment-summary {
-  /* Soft blue border instead of grey */
-  border: 1px solid #93c5fd;
+  border: 1px solid #cccccc;
   border-radius: 4px;
   padding: 18px;
   background-color: #ffffff;
@@ -51,7 +47,7 @@
 }
 
 .cart-item-container:hover {
-  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .payment-summary {
@@ -65,16 +61,13 @@
   }
 }
 
-
 .delivery-date {
-  /* Changed from green to professional blue */
-  color: #2563eb;
+  color: #111111;
   font-weight: 700;
   font-size: 19px;
   margin-top: 5px;
   margin-bottom: 22px;
 }
-
 
 .cart-item-details-grid {
   display: grid;
@@ -89,7 +82,6 @@
   }
 }
 
-
 .product-image {
   max-width: 100%;
   max-height: 120px;
@@ -97,32 +89,27 @@
   margin-right: auto;
 }
 
-
 .product-name {
   font-weight: 700;
   margin-bottom: 8px;
-  color: #1e3a5f;
+  color: #111111;
 }
 
-
 .product-price {
-  /* Changed from red to deep blue */
-  color: #1e40af;
+  color: #111111;
   font-weight: 700;
   margin-bottom: 5px;
 }
 
-
 .product-quantity .link-primary {
   margin-left: 3px;
-  color: #2563eb;
+  color: #555555;
 }
 
 .product-quantity .link-primary:hover {
-  color: #1e40af;
+  color: #000000;
   text-decoration: underline;
 }
-
 
 @media (max-width: 1000px) {
   .delivery-options {
@@ -130,13 +117,11 @@
   }
 }
 
-
 .delivery-options-title {
   font-weight: 700;
   margin-bottom: 10px;
-  color: #1e3a5f;
+  color: #111111;
 }
-
 
 .delivery-option {
   display: grid;
@@ -148,36 +133,33 @@
 .delivery-option-input {
   margin-left: 0px;
   cursor: pointer;
-  accent-color: #2563eb;
+  accent-color: #000000;
 }
 
 .delivery-option-date {
-  /* Changed from green to blue */
-  color: #2563eb;
+  color: #555555;
   font-weight: 500;
   margin-bottom: 3px;
 }
 
 .delivery-option-price {
-  color: #64748b;
+  color: #999999;
   font-size: 15px;
 }
-
 
 .payment-summary-title {
   font-weight: 700;
   font-size: 18px;
   margin-bottom: 12px;
-  color: #1e3a5f;
+  color: #111111;
 }
-
 
 .payment-summary-row {
   display: grid;
   grid-template-columns: 1fr auto;
   font-size: 15px;
   margin-bottom: 9px;
-  color: #1e40af;
+  color: #555555;
 }
 
 .payment-summary-money {
@@ -185,7 +167,7 @@
 }
 
 .subtotal-row .payment-summary-money {
-  border-top: 1px solid #93c5fd;
+  border-top: 1px solid #cccccc;
 }
 
 .subtotal-row div {
@@ -193,15 +175,13 @@
 }
 
 .total-row {
-  /* Changed from red to deep navy blue */
-  color: #1e3a5f;
+  color: #111111;
   font-weight: 700;
   font-size: 18px;
 
-  border-top: 1px solid #93c5fd;
+  border-top: 1px solid #cccccc;
   padding-top: 18px;
 }
-
 
 .place-order-button {
   width: 100%;
@@ -212,8 +192,7 @@
   margin-top: 11px;
   margin-bottom: 15px;
 
-  /* Blue CTA button */
-  background-color: #2563eb;
+  background-color: #000000;
   color: #ffffff;
   border: none;
   font-size: 16px;
@@ -223,39 +202,38 @@
 }
 
 .place-order-button:hover {
-  background-color: #1e40af;
+  background-color: #222222;
 }
 
 .place-order-button:active {
-  background-color: #1e3a5f;
+  background-color: #444444;
   transform: scale(0.98);
 }
-
 
 .quantity-input {
   width: 30px;
   display: none;
-  border: 1px solid #93c5fd;
+  border: 1px solid #cccccc;
   border-radius: 4px;
   padding: 2px 4px;
-  color: #1e3a5f;
+  color: #111111;
   text-align: center;
 }
 
 .quantity-input:focus {
   outline: none;
-  border-color: #2563eb;
+  border-color: #000000;
 }
 
 .save-quantity-link {
   display: none;
-  color: #2563eb;
+  color: #555555;
   cursor: pointer;
   font-size: 14px;
 }
 
 .save-quantity-link:hover {
-  color: #1e40af;
+  color: #000000;
   text-decoration: underline;
 }
 
