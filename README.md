@@ -196,5 +196,3 @@ Open `http://localhost:5500`
 
 **Milan**
 milan903575@gmail.com
-
-```
