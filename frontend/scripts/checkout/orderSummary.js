@@ -69,7 +69,7 @@ export function renderOrderSummary() {
     let html = '';
     deliveryOptions.forEach((deliveryOption) => {
       const dateString = calculateDeliveryDate(deliveryOption.id);
-      const priceString = deliveryOption.priceCents === 0 ? 'FREE' : `$${formatCurrency(deliveryOption.priceCents)}`;
+      const priceString = deliveryOption.priceCents === 0 ? 'FREE' : `${formatCurrency(deliveryOption.priceCents)}`;
 
       const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
 
