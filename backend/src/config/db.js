@@ -1,7 +1,11 @@
-const Database = require('better-sqlite3');
-const path = require('path');
+import Database from 'better-sqlite3';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const dbPath = path.join(__dirname, '../database/Milzio.db');
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
+
+const dbPath = path.join(dirname, '../database/Milzio.db');
 
 const db = new Database(dbPath);
 
@@ -43,4 +47,4 @@ db.prepare(`
   )
 `).run();
 
-module.exports = db;
+export default db;

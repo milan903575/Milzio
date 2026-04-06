@@ -9,4 +9,4 @@ function authorize(role) {
   }
 }
 
-module.exports = { authorize };
+export default authorize;

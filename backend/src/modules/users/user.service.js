@@ -1,22 +1,22 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const repository = require('./user.repository');
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import userRepository from './user.repository.js';
 
 async function getAllUsers() {
-  return await repository.getAllUsers();
+  return await userRepository.getAllUsers();
 }
 
 async function createUser(name, email, password) {
   const hashPassword = await bcrypt.hash(password, 10);
-  return await repository.createUser(name, email, hashPassword);
+  return await userRepository.createUser(name, email, hashPassword);
 }
 
 async function getUserByEmail(email) {
-  return await repository.getUserByEmail(email);
+  return await userRepository.getUserByEmail(email);
 }
 
 async function loginUser(email, password) {
-  const user = await repository.getUserByEmail(email);
+  const user = await userRepository.getUserByEmail(email);
   if (!user) return null;
 
   const validPassword = await bcrypt.compare(password, user.password);
@@ -37,9 +37,11 @@ async function loginUser(email, password) {
   return token;
 }
 
-module.exports = {
+const userService = {
   getAllUsers,
   createUser,
   getUserByEmail,
   loginUser
 };
+
+export default userService;

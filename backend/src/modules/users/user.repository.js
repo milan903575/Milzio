@@ -1,4 +1,4 @@
-const db = require('../../config/db');
+import db from '../../config/db.js';
 
 function getAllUsers() {
   const stmt = db.prepare(`SELECT name, email from users`);
@@ -21,8 +21,10 @@ function createUser(name, email, password) {
   return stmt.run(name, email, password);
 }
 
-module.exports = {
+const userRepository = {
   getAllUsers,
   getUserByEmail,
   createUser
 };
+
+export default userRepository;

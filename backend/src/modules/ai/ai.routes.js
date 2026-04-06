@@ -1,7 +1,9 @@
-const router = require('express').Router();
-const controller = require('./ai.controller');
-const authMiddleware = require('../../middleware/auth.middleware');
+import express from 'express';
+import authenticate from '../../middleware/auth.middleware.js';
+import aiController from './ai.controller.js';
 
-router.post('/chat', authMiddleware.authMiddleware, controller.chat);
+const router = express.Router();
 
-module.exports = router;
+router.post('/chat', authenticate, aiController.chat);
+
+export default router;

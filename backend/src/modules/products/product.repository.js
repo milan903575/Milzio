@@ -1,4 +1,4 @@
-const db = require('../../config/db');
+import db from '../../config/db.js';
 
 function getAllProducts() {
   const stmt = db.prepare(`
@@ -52,8 +52,10 @@ function createProduct(data) {
 }
 
 
-module.exports = {
+const productRepository = {
   getAllProducts,
   getProductById,
   createProduct
 };
+
+export default productRepository;

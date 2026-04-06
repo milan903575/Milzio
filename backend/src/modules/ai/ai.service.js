@@ -1,13 +1,13 @@
-require('dotenv').config();
+import 'dotenv/config';
+import aiRepository from './ai.repository.js';
 
-const repository = require('./ai.repository');
 const model = 'llama3.2';
 
 async function chat(userMessage, userId, res) {
 
-  const rawHistory = repository.getRecentHistory(userId, 6);
+  const rawHistory = aiRepository.getRecentHistory(userId, 6);
   const history = rawHistory.reverse();
-  repository.saveMessage(userId, 'user', userMessage);
+  aiRepository.saveMessage(userId, 'user', userMessage);
 
   res.write(':' + ' '.repeat(1024) + '\n\n');
   res.flush?.();
@@ -60,8 +60,12 @@ async function chat(userMessage, userId, res) {
     }
   }
 
-  repository.saveMessage(userId, 'assistant', fullResponse);
+  aiRepository.saveMessage(userId, 'assistant', fullResponse);
   return fullResponse;
 }
 
-module.exports = { chat };
+const aiService = {
+  chat
+};
+
+export default aiService;

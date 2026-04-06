@@ -1,12 +1,14 @@
-const router = require('express').Router();
-const controller = require('./product.controller');
-const authMiddleware = require('../../middleware/auth.middleware');
-const authzMiddleware = require('../../middleware/authz.middleware');
+import express from 'express';
+import productController from './product.controller.js';
+import authenticate from '../../middleware/auth.middleware.js';
+import authorize from '../../middleware/authz.middleware.js';
 
-router.get('/', controller.getAllProducts);
+const router = express.Router();
 
-router.get('/:id', controller.getProduct);
+router.get('/', productController.getAllProducts);
 
-router.post('/', authMiddleware.authMiddleware, authzMiddleware.authorize('vendor'), controller.createProduct);
+router.get('/:id', productController.getProduct);
 
-module.exports = router;
+router.post('/', authenticate, authorize('vendor'), productController.createProduct);
+
+export default router;

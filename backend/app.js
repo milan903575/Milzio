@@ -1,12 +1,12 @@
-const express = require('express');
-const app = express();
-const cors = require('cors');
-const path = require('path');
-const logger = require('./src/middleware/logger.middleware');
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import logger from './src/middleware/logger.middleware.js';
+import router from './src/router.js';
+import 'dotenv/config';
+import './src/config/db.js';
 
-require('dotenv').config();
-require('./src/config/db');
-const router = require('./src/router');
+const app = express();
 
 const port = process.env.PORT || 3000;
 
@@ -20,16 +20,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-app.use('/api', (req, res, next) => {
-  if (req.path.startsWith('/MilzioAI')) return next();
-  logger[0](req, res, next);
-});
 
-app.use('/api', (req, res, next) => {
-  if (req.path.startsWith('/MilzioAI')) return next();
-  logger[1](req, res, next);
-});
-
+app.use(logger.consoleLogger, logger.fileLogger);
 app.use('/uploads', express.static(path.resolve('uploads')));
 app.use('/api', router);
 

@@ -1,4 +1,4 @@
-const db = require('../../config/db');
+import db from '../../config/db.js';
 
 function saveMessage(userId, role, content) {
   const stmt = db.prepare(`
@@ -27,8 +27,10 @@ function deleteChat(userId) {
   return stmt.run(userId);
 }
 
-module.exports = {
+const aiRepository = {
   saveMessage,
   getRecentHistory,
   deleteChat
 };
+
+export default aiRepository;

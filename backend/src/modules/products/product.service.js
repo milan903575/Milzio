@@ -1,18 +1,20 @@
-const repository = require('./product.repository');
+import productRepository from './product.repository.js';
 
 async function getAllProducts() {
-  return await repository.getAllProducts();
+  return await productRepository.getAllProducts();
 }
 
 async function getProductById(id) {
-  return await repository.getProductById(id);
+  return await productRepository.getProductById(id);
 }
 
 async function createProduct(data) {
-  return await repository.createProduct(data);
+  return await productRepository.createProduct(data);
 }
-module.exports = {
+const productService = {
   getAllProducts,
   getProductById,
   createProduct
 };
+
+export default productService;

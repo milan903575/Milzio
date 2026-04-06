@@ -1,4 +1,4 @@
-const service = require('./ai.service');
+import aiService from './ai.service.js';
 
 async function chat(req, res) {
   const { message } = req.body;
@@ -15,7 +15,7 @@ async function chat(req, res) {
   res.flushHeaders();
 
   try {
-    await service.chat(message, userId, res);
+    await aiService.chat(message, userId, res);
 
     res.write('event: done\ndata: [DONE]\n\n');
     res.end();
@@ -31,4 +31,8 @@ async function chat(req, res) {
   }
 }
 
-module.exports = { chat };
+const aiController = {
+  chat
+};
+
+export default aiController;

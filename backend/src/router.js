@@ -1,8 +1,9 @@
-const router = require('express').Router();
+import express from 'express';
+import userRouter from './modules/users/user.routes.js';
+import productRouter from './modules/products/product.routes.js';
+import aiRouter from './modules/ai/ai.routes.js';
 
-const userRouter = require('./modules/users/user.routes');
-const productRouter = require('./modules/products/product.routes');
-const aiRouter = require('../src/modules/ai/ai.routes');
+const router = express.Router();
 
 router.get('/', (req, res) => {
   res.send('Welcome to the main page');
@@ -14,4 +15,4 @@ router.use('/products', productRouter);
 
 router.use('/MilzioAI', aiRouter);
 
-module.exports = router;
+export default router;
