@@ -1,44 +1,62 @@
-import { API_BASE } from "./utils/config.js";
+import { API_BASE } from './utils/config.js';
+
+const chatInput = document.getElementById('chatInput');
+const chatMessages = document.getElementById('chatMessages');
+const sendButton = document.querySelector('.send-btn');
 
 let isSending = false;
 
-async function sendMessage(text) {
+function renderMarkdown(text) {
+  const rawHtml = marked.parse(text);
+  return DOMPurify.sanitize(rawHtml);
+}
+
+async function sendMessage(prefilledText = '') {
   if (isSending) return;
 
-  const input = document.getElementById('chatInput');
-  const msg = text || input.value.trim();
-  if (!msg) return;
+  const message = prefilledText || chatInput.value.trim();
+  if (!message) return;
 
   isSending = true;
+  sendButton.disabled = true;
 
-  if (!text) {
-    input.value = '';
-    input.style.height = 'auto';
+  if (!prefilledText) {
+    chatInput.value = '';
+    chatInput.style.height = 'auto';
   }
 
-  appendMessage('user', msg);
-  const { bubble } = appendStreamingMessage();
+  addMessage('user', message);
+  const assistantBubble = addAssistantMessage();
 
-  const token = localStorage.getItem('token');
   try {
+    const token = localStorage.getItem('token');
+
     const response = await fetch(`${API_BASE}/api/MilzioAI/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        message: msg,
-      })
+      body: JSON.stringify({ message }),
     });
 
-    if (!response.ok) throw new Error(`Server error: ${response.status}`);
+    if (response.status === 401) {
+      assistantBubble.innerHTML = `
+        <span style="display:flex;align-items:center;gap:6px;">
+          <iconify-icon icon="mdi:lock-outline" width="16" style="color:currentColor"></iconify-icon>
+          Please <a href="../authentication.html" style="text-decoration:underline;font-weight:600;">login</a> to use the chat feature.
+        </span>`;
+      return;
+    }
+
+    if (!response.ok || !response.body) {
+      throw new Error(`Request failed: ${response.status}`);
+    }
 
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let buffer = '';
-
-    bubble.textContent = '';
+    let fullText = '';
 
     while (true) {
       const { done, value } = await reader.read();
@@ -46,103 +64,127 @@ async function sendMessage(text) {
 
       buffer += decoder.decode(value, { stream: true });
 
-      const parts = buffer.split('\n\n');
-      buffer = parts.pop();
+      const chunks = buffer.split('\n\n');
+      buffer = chunks.pop() || '';
 
-      for (const part of parts) {
-        const line = part.trim();
-        if (!line || line.startsWith(':')) continue;
+      for (const chunk of chunks) {
+        const parsed = parseSSE(chunk);
+        if (!parsed) continue;
 
-        if (line.includes('[DONE]')) return;
-
-        if (line.startsWith('data: ')) {
-          const token = line.slice(6).replace(/\\n/g, '\n');
-          bubble.textContent += token;
+        if (parsed.event === 'token') {
+          fullText += parsed.data.content || '';
+          assistantBubble.innerHTML = renderMarkdown(fullText);
           scrollToBottom();
+        }
+
+        if (parsed.event === 'done') {
+          assistantBubble.innerHTML = renderMarkdown(fullText);
+          console.log('Usage:', parsed.data.usage);
+        }
+
+        if (parsed.event === 'error') {
+          assistantBubble.textContent = parsed.data.message || 'Something went wrong.';
         }
       }
     }
-
-  } catch (err) {
-    bubble.textContent = 'Sorry, something went wrong. Please try again. Please Make Sure You Logged In to Chat';
-    console.error('Chat error:', err);
+  } catch (error) {
+    assistantBubble.textContent = 'Sorry, something went wrong. Please try again.';
+    console.error('Chat error:', error);
   } finally {
     isSending = false;
+    sendButton.disabled = false;
+    chatInput.focus();
   }
 }
 
-function scrollToBottom() {
-  const messages = document.getElementById('chatMessages');
-  messages.scrollTop = messages.scrollHeight;
+function parseSSE(block) {
+  const lines = block.split('\n');
+  let event = 'message';
+  let dataLines = [];
+
+  for (const line of lines) {
+    if (line.startsWith('event:')) {
+      event = line.slice(6).trim();
+    } else if (line.startsWith('data:')) {
+      dataLines.push(line.slice(5).trim());
+    }
+  }
+
+  if (!dataLines.length) return null;
+
+  try {
+    return {
+      event,
+      data: JSON.parse(dataLines.join('\n')),
+    };
+  } catch {
+    return null;
+  }
 }
 
-function appendMessage(role, text) {
-  const messages = document.getElementById('chatMessages');
-  const isUser = role === 'user';
+function addMessage(role, text) {
+  const wrapper = document.createElement('div');
+  wrapper.className = `msg ${role === 'user' ? 'user' : 'bot'}`;
 
-  const div = document.createElement('div');
-  div.className = `msg ${role}`;
-  div.innerHTML = `
-    <div class="msg-avatar">
-      <iconify-icon icon="${isUser ? 'mdi:account' : 'mdi:robot-outline'}" width="14" style="color:#ffffff"></iconify-icon>
-    </div>
-    <div>
-      <div class="msg-bubble">${text}</div>
-      <div class="msg-time">Just now</div>
-    </div>`;
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar';
+  avatar.innerHTML =
+    role === 'user'
+      ? '<iconify-icon icon="mdi:account" width="14" style="color:#ffffff"></iconify-icon>'
+      : '<iconify-icon icon="mdi:robot-outline" width="14" style="color:#ffffff"></iconify-icon>';
 
-  messages.appendChild(div);
-  scrollToBottom();
-}
-
-function appendStreamingMessage() {
-  const messages = document.getElementById('chatMessages');
+  const content = document.createElement('div');
 
   const bubble = document.createElement('div');
   bubble.className = 'msg-bubble';
-  bubble.textContent = '...';
+
+  if (role === 'user') {
+    bubble.textContent = text;
+  } else {
+    bubble.innerHTML = renderMarkdown(text);
+  }
 
   const time = document.createElement('div');
   time.className = 'msg-time';
   time.textContent = 'Just now';
 
-  const wrapper = document.createElement('div');
-  wrapper.appendChild(bubble);
-  wrapper.appendChild(time);
+  content.appendChild(bubble);
+  content.appendChild(time);
+  wrapper.appendChild(avatar);
+  wrapper.appendChild(content);
+  chatMessages.appendChild(wrapper);
 
-  const avatar = document.createElement('div');
-  avatar.className = 'msg-avatar';
-  avatar.innerHTML = `<iconify-icon icon="mdi:robot-outline" width="14" style="color:#ffffff"></iconify-icon>`;
-
-  const div = document.createElement('div');
-  div.className = 'msg bot';
-  div.appendChild(avatar);
-  div.appendChild(wrapper);
-
-  messages.appendChild(div);
   scrollToBottom();
-
-  return { bubble };
+  return bubble;
 }
 
-document.querySelectorAll('.suggestion-chip').forEach(chip => {
-  chip.addEventListener('click', () => sendMessage(chip.dataset.msg));
+function addAssistantMessage() {
+  return addMessage('assistant', '...');
+}
+
+function scrollToBottom() {
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+document.querySelectorAll('.suggestion-chip').forEach((chip) => {
+  chip.addEventListener('click', () => {
+    sendMessage(chip.dataset.msg || '');
+  });
 });
 
-document.querySelector('.send-btn').addEventListener('click', (e) => {
-  e.preventDefault();
-  e.stopPropagation();
+sendButton.addEventListener('click', (event) => {
+  event.preventDefault();
   sendMessage();
 });
 
-document.getElementById('chatInput').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
+chatInput.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
     sendMessage();
   }
 });
 
-document.getElementById('chatInput').addEventListener('input', function () {
-  this.style.height = 'auto';
-  this.style.height = Math.min(this.scrollHeight, 80) + 'px';
+chatInput.addEventListener('input', () => {
+  chatInput.style.height = 'auto';
+  chatInput.style.height = `${Math.min(chatInput.scrollHeight, 80)}px`;
 });

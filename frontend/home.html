@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  <!-- Cloudflare Iconify for icons -->
+
   <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 
   <link rel="stylesheet" href="styles/shared/general.css">
@@ -23,7 +23,7 @@
     <!-- LEFT COLUMN -->
     <div class="products-column">
 
-      <!-- HEADER — left side only -->
+      <!-- HEADER -->
       <div class="site-header">
         <div class="site-header-left-section">
           <a href="home.html" class="header-link">
@@ -48,11 +48,9 @@
         </div>
 
         <div class="site-header-right-section">
-
           <a class="profile-link header-link" href="profile.html">
             <span class="returns-text">Profile</span>
           </a>
-
           <a class="orders-link header-link" href="orders.html">
             <span class="returns-text">Returns</span>
             <span class="orders-text">&amp; Orders</span>
@@ -106,7 +104,6 @@
         <div class="suggestion-chip" data-msg="Compare products">
           <iconify-icon icon="mdi:compare" width="13"></iconify-icon> Compare
         </div>
-
       </div>
 
       <div class="chat-messages" id="chatMessages">
@@ -122,8 +119,6 @@
             <div class="msg-time">Just now</div>
           </div>
         </div>
-
-        <!-- typing indicator injected dynamically by chat.js -->
       </div>
 
       <div class="chat-input-area">
@@ -140,8 +135,11 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
   <script type="module" src="scripts/home.js"></script>
   <script type="module" src="scripts/chat.js"></script>
+
 </body>
 
 </html>
