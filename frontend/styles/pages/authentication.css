@@ -5,8 +5,8 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background: #e8f0fe;
+  font-family: Roboto, Arial, sans-serif;
+  background: #f5f5f5;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,13 +18,13 @@ body {
   width: 380px;
   padding: 36px 32px;
   border-radius: 12px;
-  box-shadow: 0 6px 24px rgba(25, 82, 185, 0.15);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
 }
 
 /* Toggle Tabs */
 .toggle-tabs {
   display: flex;
-  background: #e8f0fe;
+  background: #f0f0f0;
   border-radius: 8px;
   padding: 4px;
   margin-bottom: 28px;
@@ -38,13 +38,13 @@ body {
   border: none;
   border-radius: 6px;
   font-size: 15px;
-  color: #5a7fc0;
+  color: #555555;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .tab.active {
-  background: #1a56db;
+  background: #000000;
   color: #ffffff;
   font-weight: 600;
 }
@@ -52,7 +52,7 @@ body {
 /* Form */
 form h2 {
   font-size: 20px;
-  color: #1a3a6b;
+  color: #111111;
   margin-bottom: 20px;
 }
 
@@ -60,7 +60,7 @@ form input {
   width: 100%;
   padding: 11px 14px;
   margin-bottom: 14px;
-  border: 1px solid #c3d4f0;
+  border: 1px solid #dddddd;
   border-radius: 7px;
   font-size: 14px;
   outline: none;
@@ -68,14 +68,14 @@ form input {
 }
 
 form input:focus {
-  border-color: #1a56db;
+  border-color: #000000;
 }
 
 form button[type="submit"] {
   width: 100%;
   padding: 11px;
-  background: #1a56db;
-  color: #fff;
+  background: #000000;
+  color: #ffffff;
   border: none;
   border-radius: 7px;
   font-size: 15px;
@@ -86,5 +86,5 @@ form button[type="submit"] {
 }
 
 form button[type="submit"]:hover {
-  background: #1344b0;
+  background: #222222;
 }
