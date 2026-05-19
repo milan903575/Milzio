@@ -21,7 +21,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 
-app.use(logger.consoleLogger, logger.fileLogger);
+app.use('/api', logger.consoleLogger, logger.fileLogger);
 app.use('/uploads', express.static(path.resolve('uploads')));
 app.use('/api', router);
 
