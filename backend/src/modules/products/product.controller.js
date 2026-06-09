@@ -5,6 +5,13 @@ async function getAllProducts(req, res) {
   return res.status(200).json(products);
 }
 
+async function getProducts(req, res) {
+  const { id, name, brand, category, minPrice, maxPrice, keywords } = req.query;
+
+  const products = await productService.getProducts({ id, name, brand, category, minPrice, maxPrice, keywords });
+  return res.status(200).json(products);
+}
+
 async function getProduct(req, res) {
   const { id } = req.params;
   const product = await productService.getProductById(id);
@@ -28,6 +35,7 @@ async function createProduct(req, res) {
 
 const productController = {
   getAllProducts,
+  getProducts,
   getProduct,
   createProduct
 };

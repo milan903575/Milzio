@@ -1,7 +1,7 @@
 import aiService from './ai.service.js';
 
 async function chat(req, res) {
-  const { message } = req.body;
+  const { message, mode } = req.body;
   const userId = req.user?.id;
 
   if (!message || !userId) {
@@ -15,7 +15,7 @@ async function chat(req, res) {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.flushHeaders();
 
-    await aiService.chat(message, userId, res);
+    await aiService.chat(message, userId, res, mode);
 
     if (!res.writableEnded) {
       return res.end();
