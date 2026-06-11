@@ -1,3 +1,5 @@
+import { API_BASE } from "../scripts/utils/config.js";
+
 export function getProduct(productId) {
   let matchingProduct;
 
@@ -12,6 +14,6 @@ export function getProduct(productId) {
 export let products = [];
 
 export async function loadProducts() {
-  const response = await fetch('http://localhost:3000/api/products/');
+  const response = await fetch(`${API_BASE}/api/products/`);
   products = await response.json();
 }
