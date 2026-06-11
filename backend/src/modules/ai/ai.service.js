@@ -14,7 +14,7 @@ const groq = new Groq({
 });
 
 const model = 'llama-3.1-8b-instant';
-const API_BASE = process.env.API_BASE || 'http://localhost:3000';
+const API_BASE = process.env.SERVER_URL;
 
 function sendEvent(res, event, payload) {
   if (!res || typeof res.write !== 'function') {

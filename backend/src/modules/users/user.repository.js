@@ -1,30 +1,47 @@
-import db from '../../config/db.js';
+import pool from '../../config/db.js';
 
-function getAllUsers() {
-  const stmt = db.prepare(`SELECT name, email from users`);
-  return stmt.all();
+async function getAllUsers() {
+  const query = `
+    SELECT id, name, email
+    FROM users
+    ORDER BY id DESC
+  `;
+
+  const result = await pool.query(query);
+  return result.rows;
 }
 
-function getUserByEmail(email) {
-  const stmt = db.prepare(`
-    select id, name, email, password 
-    from users
-    where email = ?
-    `);
-  return stmt.get(email);
+async function getUserByEmail(email) {
+  const query = `
+    SELECT id, name, email, password, role
+    FROM users
+    WHERE email = $1
+    LIMIT 1
+  `;
+
+  const values = [email];
+  const result = await pool.query(query, values);
+
+  return result.rows[0] || null;
 }
 
-function createUser(name, email, password) {
-  const stmt = db.prepare(`
-    insert into users(name, email, password) values(?, ?, ?)
-    `);
-  return stmt.run(name, email, password);
+async function createUser(name, email, password) {
+  const query = `
+    INSERT INTO users (name, email, password)
+    VALUES ($1, $2, $3)
+    RETURNING id, name, email, role
+  `;
+
+  const values = [name, email, password];
+  const result = await pool.query(query, values);
+
+  return result.rows[0];
 }
 
 const userRepository = {
   getAllUsers,
   getUserByEmail,
-  createUser
+  createUser,
 };
 
 export default userRepository;

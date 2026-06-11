@@ -1,36 +1,51 @@
-import db from '../../config/db.js';
+import pool from '../../config/db.js';
 
-function saveMessage(userId, role, content) {
-  const stmt = db.prepare(`
-    INSERT INTO ai_chats (user_id, role, content) VALUES (?, ?, ?)`
-  );
-  return stmt.run(userId, role, content);
+async function saveMessage(userId, role, content) {
+  const query = `
+    INSERT INTO ai_chats (user_id, role, content)
+    VALUES ($1, $2, $3)
+    RETURNING id, user_id, role, content, created_at
+  `;
+
+  const values = [userId, role, content];
+  const result = await pool.query(query, values);
+
+  return result.rows[0];
 }
 
-function getRecentHistory(userId, limit = 6) {
-  const stmt = db.prepare(`
-    SELECT role, content 
+async function getRecentHistory(userId, limit = 6) {
+  const query = `
+    SELECT role, content
     FROM ai_chats
-    WHERE user_id = ?
+    WHERE user_id = $1
     ORDER BY created_at DESC
-    LIMIT ?
-  `);
+    LIMIT $2
+  `;
 
-  return stmt.all(userId, limit);
+  const values = [userId, limit];
+  const result = await pool.query(query, values);
+
+  return result.rows;
 }
 
-function deleteChat(userId) {
-  const stmt = db.prepare(`
+async function deleteChat(userId) {
+  const query = `
     DELETE FROM ai_chats
-    WHERE user_id = ?
-  `);
-  return stmt.run(userId);
+    WHERE user_id = $1
+  `;
+
+  const result = await pool.query(query, [userId]);
+
+  return {
+    deleted: result.rowCount > 0,
+    count: result.rowCount,
+  };
 }
 
 const aiRepository = {
   saveMessage,
   getRecentHistory,
-  deleteChat
+  deleteChat,
 };
 
 export default aiRepository;

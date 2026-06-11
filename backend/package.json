@@ -7,8 +7,12 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "migrate": "node-pg-migrate -m ./migrations",
+    "migrate:create": "node-pg-migrate create -m ./migrations",
+    "migrate:up": "node-pg-migrate up -m ./migrations",
+    "migrate:down": "node-pg-migrate down -m ./migrations",
+    "migrate:redo": "node-pg-migrate redo -m ./migrations"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -19,6 +23,10 @@
     "groq-sdk": "^1.1.2",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.1",
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "pg": "^8.21.0"
+  },
+  "devDependencies": {
+    "node-pg-migrate": "^8.0.4"
   }
 }
