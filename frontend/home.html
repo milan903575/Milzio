@@ -91,19 +91,21 @@
         <div class="chat-badge">AI POWERED</div>
       </div>
 
-      <div class="chat-suggestions">
-        <div class="suggestion-chip" data-msg="Best picks under ₹5k">
-          <iconify-icon icon="mdi:lightbulb-outline" width="13"></iconify-icon> Best picks under &#x20B9;5k
-        </div>
-        <div class="suggestion-chip" data-msg="Top deals">
-          <iconify-icon icon="mdi:fire" width="13"></iconify-icon> Top deals
-        </div>
-        <div class="suggestion-chip" data-msg="Track order">
-          <iconify-icon icon="mdi:package-variant" width="13"></iconify-icon> Track order
-        </div>
-        <div class="suggestion-chip" data-msg="Compare products">
-          <iconify-icon icon="mdi:compare" width="13"></iconify-icon> Compare
-        </div>
+      <div class="chat-modes" role="radiogroup" aria-label="AI chat mode">
+        <button class="mode-chip active" data-mode="general" role="radio" aria-checked="true" type="button">
+          <iconify-icon icon="mdi:message-text-outline" width="14"></iconify-icon>
+          General
+        </button>
+
+        <button class="mode-chip" data-mode="search" role="radio" aria-checked="false" type="button">
+          <iconify-icon icon="mdi:magnify" width="14"></iconify-icon>
+          Search
+        </button>
+
+        <button class="mode-chip" data-mode="compare" role="radio" aria-checked="false" type="button">
+          <iconify-icon icon="mdi:compare" width="14"></iconify-icon>
+          Compare
+        </button>
       </div>
 
       <div class="chat-messages" id="chatMessages">

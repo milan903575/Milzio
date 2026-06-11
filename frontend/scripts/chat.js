@@ -3,27 +3,37 @@ import { API_BASE } from './utils/config.js';
 const chatInput = document.getElementById('chatInput');
 const chatMessages = document.getElementById('chatMessages');
 const sendButton = document.querySelector('.send-btn');
+const modeButtons = document.querySelectorAll('.mode-chip');
 
 let isSending = false;
+let currentMode = 'general';
 
 function renderMarkdown(text) {
   const rawHtml = marked.parse(text);
   return DOMPurify.sanitize(rawHtml);
 }
 
-async function sendMessage(prefilledText = '') {
+function setActiveMode(mode) {
+  currentMode = mode;
+
+  modeButtons.forEach((button) => {
+    const isActive = button.dataset.mode === mode;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-checked', String(isActive));
+  });
+}
+
+async function sendMessage() {
   if (isSending) return;
 
-  const message = prefilledText || chatInput.value.trim();
+  const message = chatInput.value.trim();
   if (!message) return;
 
   isSending = true;
   sendButton.disabled = true;
 
-  if (!prefilledText) {
-    chatInput.value = '';
-    chatInput.style.height = 'auto';
-  }
+  chatInput.value = '';
+  chatInput.style.height = 'auto';
 
   addMessage('user', message);
   const assistantBubble = addAssistantMessage();
@@ -37,7 +47,10 @@ async function sendMessage(prefilledText = '') {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({
+        message,
+        mode: currentMode,
+      }),
     });
 
     if (response.status === 401) {
@@ -45,7 +58,8 @@ async function sendMessage(prefilledText = '') {
         <span style="display:flex;align-items:center;gap:6px;">
           <iconify-icon icon="mdi:lock-outline" width="16" style="color:currentColor"></iconify-icon>
           Please <a href="../authentication.html" style="text-decoration:underline;font-weight:600;">login</a> to use the chat feature.
-        </span>`;
+        </span>
+      `;
       return;
     }
 
@@ -60,6 +74,7 @@ async function sendMessage(prefilledText = '') {
 
     while (true) {
       const { done, value } = await reader.read();
+
       if (done) break;
 
       buffer += decoder.decode(value, { stream: true });
@@ -69,6 +84,7 @@ async function sendMessage(prefilledText = '') {
 
       for (const chunk of chunks) {
         const parsed = parseSSE(chunk);
+
         if (!parsed) continue;
 
         if (parsed.event === 'token') {
@@ -79,7 +95,6 @@ async function sendMessage(prefilledText = '') {
 
         if (parsed.event === 'done') {
           assistantBubble.innerHTML = renderMarkdown(fullText);
-          console.log('Usage:', parsed.data.usage);
         }
 
         if (parsed.event === 'error') {
@@ -100,7 +115,7 @@ async function sendMessage(prefilledText = '') {
 function parseSSE(block) {
   const lines = block.split('\n');
   let event = 'message';
-  let dataLines = [];
+  const dataLines = [];
 
   for (const line of lines) {
     if (line.startsWith('event:')) {
@@ -166,9 +181,9 @@ function scrollToBottom() {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-document.querySelectorAll('.suggestion-chip').forEach((chip) => {
-  chip.addEventListener('click', () => {
-    sendMessage(chip.dataset.msg || '');
+modeButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    setActiveMode(button.dataset.mode);
   });
 });
 
@@ -188,3 +203,5 @@ chatInput.addEventListener('input', () => {
   chatInput.style.height = 'auto';
   chatInput.style.height = `${Math.min(chatInput.scrollHeight, 80)}px`;
 });
+
+setActiveMode('general');
