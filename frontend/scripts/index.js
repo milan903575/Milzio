@@ -2,7 +2,6 @@ import { addToCart } from '../data/cart.js';
 import { products, loadProducts } from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
 import { totalItemsInCart } from '../data/cart.js';
-import { API_BASE } from './utils/config.js';
 
 (async () => {
   await loadProducts();
@@ -26,7 +25,7 @@ function renderProductsGrid() {
     return `
       <div class="product-container">
         <div class="product-image-container">
-          <img class="product-image" src="${API_BASE}${product.image}" loading="lazy" alt="${product.name}">
+          <img class="product-image" src="${product.image}" loading="lazy" alt="${product.name}">
         </div>
 
         <div class="product-name limit-text-to-2-lines">
