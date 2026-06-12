@@ -32,12 +32,12 @@
       <button type="submit">Register</button>
     </form>
 
-    <p id="message"></p>
+    <p id="message" class="toast-message"></p>
 
   </div>
 
   <script>
-    function showForm(type) {
+    window.showForm = function (type) {
       const tabs = document.querySelectorAll('.tab');
       const loginForm = document.getElementById('loginForm');
       const registerForm = document.getElementById('registerForm');

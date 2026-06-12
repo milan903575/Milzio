@@ -88,3 +88,29 @@ form button[type="submit"] {
 form button[type="submit"]:hover {
   background: #222222;
 }
+
+.toast-message {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  background: #111111;
+  color: #ffffff;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 1000;
+}
+
+.toast-message.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast-message.error {
+  background: #c62828;
+}
