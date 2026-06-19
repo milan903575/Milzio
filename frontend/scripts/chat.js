@@ -4,6 +4,7 @@ const chatInput = document.getElementById('chatInput');
 const chatMessages = document.getElementById('chatMessages');
 const sendButton = document.querySelector('.send-btn');
 const modeButtons = document.querySelectorAll('.mode-chip');
+const deleteChatBtn = document.getElementById('deleteChatBtn');
 
 let isSending = false;
 let currentMode = 'general';
@@ -21,6 +22,65 @@ function setActiveMode(mode) {
     button.classList.toggle('active', isActive);
     button.setAttribute('aria-checked', String(isActive));
   });
+}
+
+function renderWelcomeMessage() {
+  chatMessages.innerHTML = `
+    <div class="msg bot">
+      <div class="msg-avatar">
+        <iconify-icon icon="mdi:robot-outline" width="14" style="color:#ffffff"></iconify-icon>
+      </div>
+      <div>
+        <div class="msg-bubble">
+          Hey! I'm <strong>Milzio AI</strong>, your shopping assistant.<br><br>
+          Ask me anything — general help, product search, or product analysis.
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+async function loadChatHistory() {
+  try {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      renderWelcomeMessage();
+      return;
+    }
+
+    const response = await fetch(`${API_BASE}/api/MilzioAI/chat/history`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 401) {
+      renderWelcomeMessage();
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error(`History load failed: ${response.status}`);
+    }
+
+    const chats = await response.json();
+
+    if (!Array.isArray(chats) || chats.length === 0) {
+      renderWelcomeMessage();
+      return;
+    }
+
+    chatMessages.innerHTML = '';
+
+    chats.forEach((chat) => {
+      addMessage(chat.role, chat.content);
+    });
+  } catch (error) {
+    console.error('Load chat history error:', error);
+    renderWelcomeMessage();
+  }
 }
 
 async function sendMessage() {
@@ -74,7 +134,6 @@ async function sendMessage() {
 
     while (true) {
       const { done, value } = await reader.read();
-
       if (done) break;
 
       buffer += decoder.decode(value, { stream: true });
@@ -84,7 +143,6 @@ async function sendMessage() {
 
       for (const chunk of chunks) {
         const parsed = parseSSE(chunk);
-
         if (!parsed) continue;
 
         if (parsed.event === 'token') {
@@ -109,6 +167,31 @@ async function sendMessage() {
     isSending = false;
     sendButton.disabled = false;
     chatInput.focus();
+  }
+}
+
+async function deleteChat() {
+  const confirmed = window.confirm('Are you sure? This will delete your chat.');
+  if (!confirmed) return;
+
+  try {
+    const token = localStorage.getItem('token');
+
+    const response = await fetch(`${API_BASE}/api/MilzioAI/chat`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Delete failed: ${response.status}`);
+    }
+
+    renderWelcomeMessage();
+  } catch (error) {
+    console.error('Delete chat error:', error);
+    alert('Unable to delete chat right now. Please try again.');
   }
 }
 
@@ -149,7 +232,6 @@ function addMessage(role, text) {
       : '<iconify-icon icon="mdi:robot-outline" width="14" style="color:#ffffff"></iconify-icon>';
 
   const content = document.createElement('div');
-
   const bubble = document.createElement('div');
   bubble.className = 'msg-bubble';
 
@@ -159,12 +241,7 @@ function addMessage(role, text) {
     bubble.innerHTML = renderMarkdown(text);
   }
 
-  const time = document.createElement('div');
-  time.className = 'msg-time';
-  time.textContent = 'Just now';
-
   content.appendChild(bubble);
-  content.appendChild(time);
   wrapper.appendChild(avatar);
   wrapper.appendChild(content);
   chatMessages.appendChild(wrapper);
@@ -187,6 +264,8 @@ modeButtons.forEach((button) => {
   });
 });
 
+deleteChatBtn?.addEventListener('click', deleteChat);
+
 sendButton.addEventListener('click', (event) => {
   event.preventDefault();
   sendMessage();
@@ -205,3 +284,4 @@ chatInput.addEventListener('input', () => {
 });
 
 setActiveMode('general');
+loadChatHistory();

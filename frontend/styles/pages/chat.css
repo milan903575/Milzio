@@ -1,6 +1,6 @@
 /* ============================================
    styles/pages/chat.css
-   ============================================ */
+   ============================================= */
 
 html,
 body {
@@ -13,17 +13,17 @@ body {
 /* ── Full page split ── */
 .page-layout {
   display: flex;
-  height: 100vh;
+  height: 100dvh;
   width: 100%;
   overflow: hidden;
 }
 
-/* ── LEFT COLUMN (70%) ── */
+/* ── LEFT COLUMN (60%) ── */
 .products-column {
-  flex: 0 0 70%;
+  flex: 0 0 60%;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 }
 
@@ -55,12 +55,12 @@ body {
   flex-shrink: 0;
 }
 
-/* ── RIGHT COLUMN — CHAT (30%) ── */
+/* ── RIGHT COLUMN — CHAT (40%) ── */
 .chat-panel {
-  flex: 0 0 30%;
+  flex: 0 0 40%;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
   background: #ffffff;
   overflow: hidden;
   border-left: 1px solid #e0e0e0;
@@ -372,7 +372,7 @@ body {
 
 /* ══════════════════════════════════════
    RESPONSIVE — Mobile
-   ═══════════════════════════════════════ */
+   ════════════════════════════════════════ */
 @media (max-width: 768px) {
 
   html,
@@ -383,14 +383,14 @@ body {
 
   .page-layout {
     flex-direction: column;
-    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
   }
 
   .products-column {
-    flex: 1;
+    flex: 0 0 50dvh;
     width: 100%;
-    height: auto;
+    height: 50dvh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -419,9 +419,9 @@ body {
   }
 
   .chat-panel {
-    flex: 0 0 30vh;
+    flex: 0 0 50dvh;
     width: 100%;
-    height: 30vh;
+    height: 50dvh;
     border-left: none;
     border-top: none;
     flex-shrink: 0;

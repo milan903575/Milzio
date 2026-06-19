@@ -12,7 +12,7 @@
 
   <link rel="stylesheet" href="styles/shared/general.css">
   <link rel="stylesheet" href="styles/shared/site-header.css">
-  <link rel="stylesheet" href="styles/pages/home.css">
+  <link rel="stylesheet" href="styles/pages/index.css">
   <link rel="stylesheet" href="styles/pages/chat.css">
 </head>
 
@@ -88,7 +88,10 @@
             <span class="status-dot"></span> Online &middot; Always ready
           </div>
         </div>
-        <div class="chat-badge">AI POWERED</div>
+        <button class="chat-delete-btn" id="deleteChatBtn" type="button">
+          <iconify-icon icon="mdi:delete-outline" width="16"></iconify-icon>
+          Delete Chat
+        </button>
       </div>
 
       <div class="chat-modes" role="radiogroup" aria-label="AI chat mode">
@@ -102,9 +105,9 @@
           Search
         </button>
 
-        <button class="mode-chip" data-mode="compare" role="radio" aria-checked="false" type="button">
+        <button class="mode-chip" data-mode="analyze" role="radio" aria-checked="false" type="button">
           <iconify-icon icon="mdi:compare" width="14"></iconify-icon>
-          Compare
+          Analyze
         </button>
       </div>
 
@@ -115,10 +118,8 @@
           </div>
           <div>
             <div class="msg-bubble">
-              Hey! I'm <strong>Milzio AI</strong>, your smart shopping assistant.<br><br>
-              Ask me anything — find products, compare specs, track orders, or get recommendations.
             </div>
-            <div class="msg-time">Just now</div>
+            <div class="msg-time"></div>
           </div>
         </div>
       </div>
@@ -131,7 +132,7 @@
             <iconify-icon icon="mdi:send" width="16" style="color:#ffffff"></iconify-icon>
           </button>
         </div>
-        <div class="input-hint">Milzio AI &middot; Powered by your store data</div>
+        <div class="input-hint">Milzio AI &middot; Developed by Milan</div>
       </div>
 
     </div>

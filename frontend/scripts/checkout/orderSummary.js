@@ -4,7 +4,6 @@ import { formatCurrency } from '../utils/money.js';
 import { calculateDeliveryDate, deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
 import { renderPaymentSummary } from './paymentSummary.js';
 import { renderCheckoutHeader } from './checkoutHeader.js';
-import { API_BASE } from '../utils/config.js';
 
 
 
@@ -29,7 +28,7 @@ export function renderOrderSummary() {
       </div>
 
       <div class="cart-item-details-grid">
-        <img class="product-image" src="${API_BASE}${matchingProduct.image}">
+        <img class="product-image" src="${matchingProduct.image}">
 
         <div class="cart-item-details">
           <div class="product-name">
