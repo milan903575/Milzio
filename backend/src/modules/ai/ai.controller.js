@@ -35,8 +35,45 @@ async function chat(req, res) {
   }
 }
 
+async function getChatHistory(req, res) {
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  try {
+    const chats = await aiService.getChatHistory(userId);
+    return res.status(200).json(chats);
+  } catch (error) {
+    console.error('Get chat history error:', error);
+    return res.status(500).json({ message: 'Something went wrong' });
+  }
+}
+
+async function deleteChat(req, res) {
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
+  try {
+    const result = await aiService.deleteChat(userId);
+    return res.status(200).json({
+      message: result.deleted ? 'Chat deleted successfully' : 'No chat found to delete',
+      ...result,
+    });
+  } catch (error) {
+    console.error('Delete chat error:', error);
+    return res.status(500).json({ message: 'Something went wrong' });
+  }
+}
+
 const aiController = {
-  chat
+  chat,
+  getChatHistory,
+  deleteChat,
 };
 
 export default aiController;

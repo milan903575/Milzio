@@ -47,6 +47,7 @@ async function getProducts(filters = {}) {
     SELECT
       id,
       name,
+      description,
       brand,
       category,
       price_cents,

@@ -15,9 +15,10 @@ async function saveMessage(userId, role, content) {
 
 async function getRecentHistory(userId, limit = 6) {
   const query = `
-    SELECT role, content
+    SELECT role, content, created_at
     FROM ai_chats
     WHERE user_id = $1
+      AND is_deleted = FALSE
     ORDER BY created_at DESC
     LIMIT $2
   `;
@@ -30,8 +31,10 @@ async function getRecentHistory(userId, limit = 6) {
 
 async function deleteChat(userId) {
   const query = `
-    DELETE FROM ai_chats
+    UPDATE ai_chats
+    SET is_deleted = TRUE
     WHERE user_id = $1
+      AND is_deleted = FALSE
   `;
 
   const result = await pool.query(query, [userId]);
