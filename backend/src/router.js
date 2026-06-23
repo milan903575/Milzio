@@ -2,7 +2,7 @@ import express from 'express';
 import userRouter from './modules/users/user.routes.js';
 import productRouter from './modules/products/product.routes.js';
 import aiRouter from './modules/ai/ai.routes.js';
-import cartRouter from './modules/cart/cart.routes.js';
+import cartRouter from './modules/carts/cart.routes.js';
 import orderRouter from './modules/orders/order.routes.js';
 
 const router = express.Router();

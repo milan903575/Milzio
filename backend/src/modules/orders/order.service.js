@@ -1,7 +1,7 @@
 import pool from '../../config/db.js';
 import orderRepository from './order.repository.js';
-import cartService from '../cart/cart.service.js';
-import cartRepository from '../cart/cart.repository.js';
+import cartService from '../carts/cart.service.js';
+import cartRepository from '../carts/cart.repository.js';
 
 async function createOrder(userId) {
 
