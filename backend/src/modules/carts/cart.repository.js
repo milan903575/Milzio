@@ -97,8 +97,8 @@ async function removeCartItem(itemId, cartId) {
   return result.rows[0] || null;
 }
 
-async function clearCart(cartId) {
-  await pool.query(
+async function clearCart(cartId, client = pool) {
+  await client.query(
     `DELETE FROM cart_items WHERE cart_id = $1`,
     [cartId]
   );

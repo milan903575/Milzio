@@ -180,11 +180,25 @@ async function createProduct(data) {
   return parseProduct(result.rows[0]);
 }
 
+async function reduceStock(productId, quantity, client = pool) {
+  const result = await client.query(
+    `UPDATE products
+     SET stock = stock - $1
+     WHERE id = $2
+       AND stock >= $1
+     RETURNING id, stock`,
+    [quantity, productId]
+  );
+
+  return result.rows[0] || null;
+}
+
 const productRepository = {
   getAllProducts,
   getProducts,
   getProductById,
   createProduct,
+  reduceStock,
 };
 
 export default productRepository;
