@@ -1,81 +1,94 @@
-export let cart;
+import { API_BASE } from '../scripts/utils/config.js';
 
-loadFromStorage();
-export function loadFromStorage() {
-  cart = JSON.parse(localStorage.getItem('cart'));
+export let cart = [];
 
-  if (cart === null) {
-    cart = [];
-  }
+function getToken() {
+  return localStorage.getItem('token');
 }
 
-function saveToStorage() {
-  localStorage.setItem('cart', JSON.stringify(cart));
-}
+async function apiFetch(url, options = {}) {
+  const token = getToken();
 
-export function addToCart(productId) {
-  let matchingItem;
-  cart.forEach((cartItem) => {
-    if (productId === cartItem.productId) {
-      matchingItem = cartItem;
+  const res = await fetch(`${API_BASE}${url}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(options.headers || {}),
+      Authorization: `Bearer ${token}`
     }
   });
 
-  if (matchingItem) {
-    matchingItem.quantity += 1;
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.message || 'Request failed');
   }
-  else {
-    cart.push({
-      productId: productId,
-      quantity: 1,
-      deliveryOptionId: '1'
+
+  return data;
+}
+
+export async function loadFromStorage() {
+  try {
+    const response = await apiFetch('/api/carts', {
+      method: 'GET'
     });
+
+    cart = response.data.items || [];
+    return cart;
+  } catch (error) {
+    console.error('Failed to load cart:', error.message);
+    cart = [];
+    return cart;
   }
-  saveToStorage();
 }
 
-
-export function removeFromCart(productId) {
-  const newCart = [];
-  cart.forEach((cartItem) => {
-    if (cartItem.productId !== productId) {
-      newCart.push(cartItem);
-    }
+export async function addToCart(productId, quantity = 1) {
+  const response = await apiFetch('/api/carts/items', {
+    method: 'POST',
+    body: JSON.stringify({
+      product_id: Number(productId),
+      quantity: Number(quantity)
+    })
   });
-  cart = newCart;
 
-  saveToStorage();
+  await loadFromStorage();
+  return response.data;
 }
 
-
-export function updateQuantity(productId, newQuantity) {
-  cart.forEach((product) => {
-    if (product.productId === productId) {
-      product.quantity += newQuantity;
-      saveToStorage();
-    }
+export async function removeFromCart(itemId) {
+  await apiFetch(`/api/carts/items/${itemId}`, {
+    method: 'DELETE'
   });
+
+  await loadFromStorage();
+}
+
+export async function updateQuantity(itemId, quantity) {
+  const response = await apiFetch(`/api/carts/items/${itemId}`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      quantity: Number(quantity)
+    })
+  });
+
+  await loadFromStorage();
+  return response.data;
 }
 
 export function totalItemsInCart() {
   let totalItems = 0;
+
   cart.forEach((cartItem) => {
     totalItems += cartItem.quantity;
   });
+
   return totalItems;
 }
 
-
-export function updateDeliveryOption(productId, deliveryOptionId) {
-  let matchingItem;
-
-  cart.forEach((cartItem) => {
-    if (productId === cartItem.productId) {
-      matchingItem = cartItem;
-    }
+export async function clearCart() {
+  await apiFetch('/api/carts', {
+    method: 'DELETE'
   });
-  matchingItem.deliveryOptionId = deliveryOptionId;
-  saveToStorage();
+
+  cart = [];
 }
-
-
