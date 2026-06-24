@@ -2,7 +2,7 @@ import cartRepository from './cart.repository.js';
 import productRepository from '../products/product.repository.js';
 
 async function getCart(userId) {
-  const items = await cartRepository.getCartByUserId(userId);
+  const items = await cartRepository.getCartItemsByUserId(userId);
 
   const total_cents = items.reduce(
     (sum, item) => sum + item.price_cents * item.quantity,
@@ -38,7 +38,6 @@ async function addItem(userId, productId, quantity) {
   }
 
   const cart = await cartRepository.getOrCreateCart(userId);
-
   const existing = await cartRepository.getCartItemByProduct(cart.id, productId);
 
   if (existing) {
@@ -57,7 +56,6 @@ async function addItem(userId, productId, quantity) {
   return await cartRepository.addCartItem(cart.id, productId, quantity);
 }
 
-// update quantity of an existing cart item
 async function updateItem(userId, itemId, quantity) {
   if (!quantity || quantity < 1) {
     throw { status: 400, message: 'Quantity must be at least 1' };

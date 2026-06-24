@@ -16,12 +16,14 @@ async function getOrCreateCart(userId) {
   return created.rows[0];
 }
 
-async function getCartByUserId(userId) {
+async function getCartItemsByUserId(userId) {
+  const cart = await getOrCreateCart(userId);
+
   const result = await pool.query(
     `SELECT
-      ci.id           AS item_id,
+      ci.id AS item_id,
       ci.quantity,
-      p.id            AS product_id,
+      p.id AS product_id,
       p.name,
       p.brand,
       p.category,
@@ -30,12 +32,11 @@ async function getCartByUserId(userId) {
       p.image,
       p.stock,
       p.rating_stars
-    FROM carts c
-    JOIN cart_items ci ON ci.cart_id = c.id
-    JOIN products p ON p.id = ci.product_id
-    WHERE c.user_id = $1
-    ORDER BY ci.id ASC`,
-    [userId]
+     FROM cart_items ci
+     JOIN products p ON p.id = ci.product_id
+     WHERE ci.cart_id = $1
+     ORDER BY ci.id ASC`,
+    [cart.id]
   );
 
   return result.rows;
@@ -43,7 +44,8 @@ async function getCartByUserId(userId) {
 
 async function getCartItem(itemId, cartId) {
   const result = await pool.query(
-    `SELECT id, quantity, product_id FROM cart_items
+    `SELECT id, quantity, product_id
+     FROM cart_items
      WHERE id = $1 AND cart_id = $2
      LIMIT 1`,
     [itemId, cartId]
@@ -54,7 +56,8 @@ async function getCartItem(itemId, cartId) {
 
 async function getCartItemByProduct(cartId, productId) {
   const result = await pool.query(
-    `SELECT id, quantity FROM cart_items
+    `SELECT id, quantity
+     FROM cart_items
      WHERE cart_id = $1 AND product_id = $2
      LIMIT 1`,
     [cartId, productId]
@@ -106,7 +109,7 @@ async function clearCart(cartId, client = pool) {
 
 const cartRepository = {
   getOrCreateCart,
-  getCartByUserId,
+  getCartItemsByUserId,
   getCartItem,
   getCartItemByProduct,
   addCartItem,

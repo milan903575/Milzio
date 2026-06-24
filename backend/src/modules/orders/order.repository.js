@@ -12,11 +12,14 @@ async function insertOrder(userId, total_cents, client = pool) {
 }
 
 async function insertOrderItem(orderId, item, client = pool) {
-  await client.query(
+  const result = await client.query(
     `INSERT INTO order_items (order_id, product_id, name, brand, price_cents, quantity)
-     VALUES ($1, $2, $3, $4, $5, $6)`,
+     VALUES ($1, $2, $3, $4, $5, $6)
+     RETURNING id, order_id, product_id, name, brand, price_cents, quantity`,
     [orderId, item.product_id, item.name, item.brand, item.price_cents, item.quantity]
   );
+
+  return result.rows[0];
 }
 
 async function getOrdersByUser(userId) {

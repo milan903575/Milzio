@@ -4,6 +4,7 @@ import productRouter from './modules/products/product.routes.js';
 import aiRouter from './modules/ai/ai.routes.js';
 import cartRouter from './modules/carts/cart.routes.js';
 import orderRouter from './modules/orders/order.routes.js';
+import paymentRouter from './modules/payments/payment.routes.js';
 
 const router = express.Router();
 
@@ -20,5 +21,7 @@ router.use('/MilzioAI', aiRouter);
 router.use('/cart', cartRouter);
 
 router.use('/orders', orderRouter);
+
+router.use('/payments', paymentRouter);
 
 export default router;

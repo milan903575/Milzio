@@ -1,8 +1,5 @@
-// src/modules/orders/order.controller.js
-
 import orderService from './order.service.js';
 
-// POST /api/orders
 async function createOrder(req, res, next) {
   try {
     const order = await orderService.createOrder(req.user.id);
@@ -16,7 +13,6 @@ async function createOrder(req, res, next) {
   }
 }
 
-// GET /api/orders
 async function getUserOrders(req, res, next) {
   try {
     const orders = await orderService.getUserOrders(req.user.id);
@@ -30,7 +26,6 @@ async function getUserOrders(req, res, next) {
   }
 }
 
-// GET /api/orders/:orderId
 async function getOrderById(req, res, next) {
   try {
     const orderId = Number(req.params.orderId);

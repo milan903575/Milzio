@@ -1,12 +1,9 @@
 import pool from '../../config/db.js';
 import orderRepository from './order.repository.js';
-import cartService from '../carts/cart.service.js';
 import cartRepository from '../carts/cart.repository.js';
 
 async function createOrder(userId) {
-
-  const cart = await cartService.getCart(userId);
-  const cartItems = cart.items;
+  const cartItems = await cartRepository.getCartItemsByUserId(userId);
 
   if (!cartItems || cartItems.length === 0) {
     throw { status: 400, message: 'Your cart is empty' };
@@ -37,11 +34,7 @@ async function createOrder(userId) {
       await orderRepository.insertOrderItem(order.id, item, client);
     }
 
-    const cartRow = await cartRepository.getOrCreateCart(userId);
-    await cartRepository.clearCart(cartRow.id, client);
-
     await client.query('COMMIT');
-
     return order;
   } catch (error) {
     await client.query('ROLLBACK');
