@@ -45,7 +45,16 @@ async function createOrder(userId) {
 }
 
 async function getUserOrders(userId) {
-  return await orderRepository.getOrdersByUser(userId);
+  const orders = await orderRepository.getOrdersByUser(userId);
+
+  const ordersWithItems = await Promise.all(
+    orders.map(async (order) => {
+      const fullOrder = await orderRepository.getOrderById(order.id, userId);
+      return fullOrder;
+    })
+  );
+
+  return ordersWithItems;
 }
 
 async function getOrderById(orderId, userId) {

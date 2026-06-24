@@ -47,10 +47,20 @@ async function getOrderById(orderId, userId) {
   if (!order) return null;
 
   const itemsResult = await pool.query(
-    `SELECT id, product_id, name, brand, price_cents, quantity
-     FROM order_items
-     WHERE order_id = $1
-     ORDER BY id ASC`,
+    `SELECT 
+        oi.id,
+        oi.order_id,
+        oi.product_id,
+        oi.name,
+        oi.brand,
+        oi.price_cents,
+        oi.quantity,
+        p.image
+     FROM order_items oi
+     LEFT JOIN products p
+       ON oi.product_id = p.id
+     WHERE oi.order_id = $1
+     ORDER BY oi.id ASC`,
     [orderId]
   );
 
