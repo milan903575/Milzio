@@ -18,7 +18,7 @@ router.use('/products', productRouter);
 
 router.use('/MilzioAI', aiRouter);
 
-router.use('/cart', cartRouter);
+router.use('/carts', cartRouter);
 
 router.use('/orders', orderRouter);
 
