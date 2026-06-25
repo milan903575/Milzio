@@ -1,3 +1,5 @@
+import { API_BASE } from "./utils/config.js";
+
 async function fetchOrders() {
   const token = localStorage.getItem('token');
 
@@ -5,7 +7,7 @@ async function fetchOrders() {
     throw new Error('Please login first');
   }
 
-  const response = await fetch('http://localhost:3000/api/orders', {
+  const response = await fetch(`${API_BASE}/api/orders`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`
