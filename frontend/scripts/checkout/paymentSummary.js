@@ -1,10 +1,11 @@
 import { cart, loadFromStorage, totalItemsInCart } from '../../data/cart.js';
 import { formatCurrency } from '../utils/money.js';
+import { API_BASE } from '../utils/config.js';
 
 async function createOrder() {
   const token = localStorage.getItem('token');
 
-  const response = await fetch('http://localhost:3000/api/orders', {
+  const response = await fetch(`${API_BASE}/api/orders`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -24,7 +25,7 @@ async function createOrder() {
 async function createGatewayOrder(orderId) {
   const token = localStorage.getItem('token');
 
-  const response = await fetch('http://localhost:3000/api/payments/create-order', {
+  const response = await fetch(`${API_BASE}/api/payments/create-order`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -47,7 +48,7 @@ async function createGatewayOrder(orderId) {
 async function verifyPayment(paymentData) {
   const token = localStorage.getItem('token');
 
-  const response = await fetch('http://localhost:3000/api/payments/verify', {
+  const response = await fetch(`${API_BASE}/api/payments/verify`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
