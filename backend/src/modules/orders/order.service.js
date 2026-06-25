@@ -23,6 +23,15 @@ async function createOrder(userId) {
     0
   );
 
+  const existingOrder = await orderRepository.getReusablePendingOrder(
+    userId,
+    total_cents
+  );
+
+  if (existingOrder) {
+    return existingOrder;
+  }
+
   const client = await pool.connect();
 
   try {
@@ -48,10 +57,7 @@ async function getUserOrders(userId) {
   const orders = await orderRepository.getOrdersByUser(userId);
 
   const ordersWithItems = await Promise.all(
-    orders.map(async (order) => {
-      const fullOrder = await orderRepository.getOrderById(order.id, userId);
-      return fullOrder;
-    })
+    orders.map((order) => orderRepository.getOrderById(order.id, userId))
   );
 
   return ordersWithItems;

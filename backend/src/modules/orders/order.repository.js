@@ -22,6 +22,21 @@ async function insertOrderItem(orderId, item, client = pool) {
   return result.rows[0];
 }
 
+async function getReusablePendingOrder(userId, totalCents) {
+  const result = await pool.query(
+    `SELECT id, user_id, total_cents, status, created_at
+     FROM orders
+     WHERE user_id = $1
+       AND total_cents = $2
+       AND status = 'pending'
+     ORDER BY created_at DESC
+     LIMIT 1`,
+    [userId, totalCents]
+  );
+
+  return result.rows[0] || null;
+}
+
 async function getOrdersByUser(userId) {
   const result = await pool.query(
     `SELECT id, total_cents, status, created_at
@@ -44,10 +59,13 @@ async function getOrderById(orderId, userId) {
   );
 
   const order = orderResult.rows[0] || null;
-  if (!order) return null;
+
+  if (!order) {
+    return null;
+  }
 
   const itemsResult = await pool.query(
-    `SELECT 
+    `SELECT
         oi.id,
         oi.order_id,
         oi.product_id,
@@ -64,7 +82,10 @@ async function getOrderById(orderId, userId) {
     [orderId]
   );
 
-  return { ...order, items: itemsResult.rows };
+  return {
+    ...order,
+    items: itemsResult.rows
+  };
 }
 
 async function updateOrderStatus(orderId, status, client = pool) {
@@ -82,6 +103,7 @@ async function updateOrderStatus(orderId, status, client = pool) {
 const orderRepository = {
   insertOrder,
   insertOrderItem,
+  getReusablePendingOrder,
   getOrdersByUser,
   getOrderById,
   updateOrderStatus,
