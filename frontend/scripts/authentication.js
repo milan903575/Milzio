@@ -5,13 +5,23 @@ const loginEmailEl = document.getElementById("loginEmail");
 
 function showMessage(text, isError = false) {
   messageEl.innerText = text;
-  messageEl.classList.add("show");
-  messageEl.classList.toggle("error", isError);
 
   clearTimeout(messageEl.hideTimer);
+  clearTimeout(messageEl.resetTimer);
+
+  messageEl.classList.remove("show", "error", "success");
+
+  void messageEl.offsetWidth;
+
+  messageEl.classList.add(isError ? "error" : "success");
+  messageEl.classList.add("show");
+
   messageEl.hideTimer = setTimeout(() => {
     messageEl.classList.remove("show");
-    messageEl.classList.remove("error");
+
+    messageEl.resetTimer = setTimeout(() => {
+      messageEl.classList.remove("error", "success");
+    }, 300);
   }, 2500);
 }
 
