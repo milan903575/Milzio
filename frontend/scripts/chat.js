@@ -325,17 +325,21 @@ loadChatHistory();
   // ── Swipe down to close ──
   let startY = 0;
   let isDragging = false;
+  let swipeAllowed = false;
 
   panel.addEventListener('touchstart', (e) => {
     if (!isMobile()) return;
     startY = e.touches[0].clientY;
     isDragging = true;
+
+    // Only allow swipe-to-close if messages are scrolled to the top
+    const msgs = document.getElementById('chatMessages');
+    swipeAllowed = !msgs || msgs.scrollTop <= 0;
   }, { passive: true });
 
   panel.addEventListener('touchmove', (e) => {
-    if (!isMobile() || !isDragging) return;
+    if (!isMobile() || !isDragging || !swipeAllowed) return;
     const deltaY = e.touches[0].clientY - startY;
-    // Give visual feedback while dragging down
     if (deltaY > 0) {
       panel.style.transform = `translateY(${deltaY}px)`;
       panel.style.transition = 'none';
@@ -346,13 +350,11 @@ loadChatHistory();
     if (!isMobile() || !isDragging) return;
     isDragging = false;
     const deltaY = e.changedTouches[0].clientY - startY;
-    panel.style.transition = ''; // restore CSS transition
-    if (deltaY > 80) {
-      // Swiped down far enough — close
+    panel.style.transition = '';
+    if (swipeAllowed && deltaY > 80) {
       closeChat();
       panel.style.transform = '';
     } else {
-      // Snap back open
       panel.style.transform = '';
     }
   }, { passive: true });
