@@ -285,3 +285,86 @@ chatInput.addEventListener('input', () => {
 
 setActiveMode('general');
 loadChatHistory();
+
+(function () {
+  const fab = document.getElementById('chatFab');
+  const panel = document.querySelector('.chat-panel');
+  const backdrop = document.getElementById('chatBackdrop');
+  const badge = document.getElementById('chatFabBadge');
+
+  if (!fab || !panel || !backdrop) return;
+
+  // Only run on mobile
+  function isMobile() { return window.innerWidth <= 768; }
+
+  function openChat() {
+    panel.classList.add('chat-open');
+    backdrop.classList.add('active');
+    fab.classList.add('active');
+    fab.setAttribute('aria-label', 'Close AI chat');
+    badge.classList.remove('visible');
+  }
+
+  function closeChat() {
+    panel.classList.remove('chat-open');
+    backdrop.classList.remove('active');
+    fab.classList.remove('active');
+    fab.setAttribute('aria-label', 'Open AI chat');
+  }
+
+  fab.addEventListener('click', () => {
+    if (!isMobile()) return;
+    panel.classList.contains('chat-open') ? closeChat() : openChat();
+  });
+
+  backdrop.addEventListener('click', () => {
+    if (!isMobile()) return;
+    closeChat();
+  });
+
+  // ── Swipe down to close ──
+  let startY = 0;
+  let isDragging = false;
+
+  panel.addEventListener('touchstart', (e) => {
+    if (!isMobile()) return;
+    startY = e.touches[0].clientY;
+    isDragging = true;
+  }, { passive: true });
+
+  panel.addEventListener('touchmove', (e) => {
+    if (!isMobile() || !isDragging) return;
+    const deltaY = e.touches[0].clientY - startY;
+    // Give visual feedback while dragging down
+    if (deltaY > 0) {
+      panel.style.transform = `translateY(${deltaY}px)`;
+      panel.style.transition = 'none';
+    }
+  }, { passive: true });
+
+  panel.addEventListener('touchend', (e) => {
+    if (!isMobile() || !isDragging) return;
+    isDragging = false;
+    const deltaY = e.changedTouches[0].clientY - startY;
+    panel.style.transition = ''; // restore CSS transition
+    if (deltaY > 80) {
+      // Swiped down far enough — close
+      closeChat();
+      panel.style.transform = '';
+    } else {
+      // Snap back open
+      panel.style.transform = '';
+    }
+  }, { passive: true });
+
+  // ── Show badge when bot sends a new message while chat is closed ──
+  const msgContainer = document.getElementById('chatMessages');
+  if (msgContainer) {
+    const observer = new MutationObserver(() => {
+      if (isMobile() && !panel.classList.contains('chat-open')) {
+        badge.classList.add('visible');
+      }
+    });
+    observer.observe(msgContainer, { childList: true });
+  }
+})();
