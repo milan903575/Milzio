@@ -21,6 +21,9 @@ async function apiFetch(url, options = {}) {
   const data = await res.json();
 
   if (!res.ok) {
+    if (res.status === 401) {
+      throw new Error('Please log in to continue. Click Profile to log in.');
+    }
     throw new Error(data.message || 'Request failed');
   }
 

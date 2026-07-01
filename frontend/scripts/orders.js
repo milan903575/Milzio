@@ -4,7 +4,7 @@ async function fetchOrders() {
   const token = localStorage.getItem('token');
 
   if (!token) {
-    throw new Error('Please login first');
+    throw new Error('Please log in to continue. Click Profile to log in.');
   }
 
   const response = await fetch(`${API_BASE}/api/orders`, {
@@ -17,6 +17,9 @@ async function fetchOrders() {
   const result = await response.json();
 
   if (!response.ok) {
+    if (response.status === 401) {
+      throw new Error('Please log in to continue. Click Profile to log in.');
+    }
     throw new Error(result.message || 'Failed to fetch orders');
   }
 
@@ -113,9 +116,7 @@ function generateOrderHTML(order) {
 async function renderOrders() {
   const ordersGrid = document.querySelector('.orders-grid');
 
-  if (!ordersGrid) {
-    return;
-  }
+  if (!ordersGrid) return;
 
   try {
     ordersGrid.innerHTML = '<div class="loading">Loading your orders...</div>';
@@ -138,7 +139,7 @@ async function renderOrders() {
 
     ordersGrid.innerHTML = `
       <div class="error-message">
-        Failed to load orders: ${escapeHtml(error.message)}
+        ${escapeHtml(error.message)}
       </div>
     `;
   }

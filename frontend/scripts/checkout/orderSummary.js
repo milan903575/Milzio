@@ -6,7 +6,6 @@ import {
 } from '../../data/cart.js';
 import { formatCurrency } from '../utils/money.js';
 import { renderPaymentSummary } from './paymentSummary.js';
-import { renderCheckoutHeader } from './checkoutHeader.js';
 
 export async function renderOrderSummary() {
   await loadFromStorage();
@@ -85,7 +84,10 @@ export async function renderOrderSummary() {
     `;
   });
 
-  document.querySelector('.js-order-summury').innerHTML = cartSummaryHTML;
+  const orderSummaryElement = document.querySelector('.js-order-summury');
+  if (!orderSummaryElement) return;
+
+  orderSummaryElement.innerHTML = cartSummaryHTML;
 
   document.querySelectorAll('.js-delete-quantity-link').forEach((button) => {
     button.addEventListener('click', async (event) => {
@@ -100,7 +102,6 @@ export async function renderOrderSummary() {
         await removeFromCart(itemId);
         await renderOrderSummary();
         await renderPaymentSummary();
-        renderCheckoutHeader();
       } catch (error) {
         console.error('Remove item failed:', error.message);
         alert(error.message || 'Failed to remove item');
@@ -146,13 +147,10 @@ export async function renderOrderSummary() {
         await updateQuantity(itemId, quantity);
         await renderOrderSummary();
         await renderPaymentSummary();
-        renderCheckoutHeader();
       } catch (error) {
         console.error('Update quantity failed:', error.message);
         alert(error.message || 'Failed to update quantity');
       }
     });
   });
-
-  renderCheckoutHeader();
 }
