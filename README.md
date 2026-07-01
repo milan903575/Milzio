@@ -19,6 +19,12 @@ Milzio is a full-stack e-commerce platform built from scratch with a conversatio
 
 ***
 
+## System Architecture
+
+This high-level architecture diagram shows how Milzio’s frontend, backend, database, and external services interact.
+
+<img width="650" alt="Image" src="https://github.com/user-attachments/assets/44398bad-abff-4fd6-96bd-ce65dbde8bfd" />
+
 ## Features
 
 - Product listing with ratings, discounts, and images
