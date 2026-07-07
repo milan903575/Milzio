@@ -224,6 +224,7 @@ Open `http://localhost:5500`
 
 - Backend built entirely from scratch following a **controller → service → repository** layered pattern
 - Each feature is isolated as an independent module
+- Standardized API responses and centralized error handling for reliable frontend integration.
 - Separate **auth** and **authz** middleware — authentication and authorization handled independently
 - Payments follow a two-step flow: app order creation → Razorpay gateway order → signature verification
 - AI streaming uses **Server-Sent Events (SSE)** for real-time token delivery
