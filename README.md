@@ -23,7 +23,7 @@ Milzio is a full-stack e-commerce platform built from scratch with a conversatio
 
 This high-level architecture diagram shows how Milzio’s frontend, backend, database, and external services interact.
 
-<img width="650" alt="Image" src="https://github.com/user-attachments/assets/44398bad-abff-4fd6-96bd-ce65dbde8bfd" />
+<img width="700" alt="Image" src="https://github.com/user-attachments/assets/ffbfb2f4-daf4-4aa7-9022-39450c49691b" />
 
 ## Features
 
@@ -70,7 +70,7 @@ Deep analysis of a specific product. The assistant pulls the full product detail
 - **Auth** — JWT + bcrypt
 - **Payment** — Razorpay
 - **Image Storage** — Cloudinary
-- **AI** — Groq API (llama3) with SSE streaming
+- **AI** — Groq API (llama-3.1-8b-instant) with SSE streaming
 - **Logging** — Morgan
 - **API Testing** — Postman
 
