@@ -17,9 +17,10 @@ async function loadProfile() {
     }
   });
 
-  const user = await res.json();
+  const result = await res.json();
+  const user = result.data;
 
-  if (!user || !user.name || !user.email) {
+  if (!res.ok || !user || !user.name || !user.email) {
     document.getElementById("profileName").innerText = "Get started";
     document.getElementById("profileEmail").innerText = "Log in or sign up to access AI chat.";
     document.getElementById("avatar").innerText = "?";

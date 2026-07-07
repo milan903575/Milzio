@@ -72,8 +72,8 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   const data = await res.json();
 
   if (res.ok) {
-    localStorage.setItem("token", data.token);
-    showMessage("Login successful");
+    localStorage.setItem("token", data.data.token);
+    showMessage(data.message || "Login successful");
     setTimeout(() => {
       window.location.href = "../profile.html";
     }, 800);

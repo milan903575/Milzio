@@ -61,11 +61,13 @@ async function loadChatHistory() {
       return;
     }
 
+    const result = await response.json();
+
     if (!response.ok) {
-      throw new Error(`History load failed: ${response.status}`);
+      throw new Error(result.message || `History load failed: ${response.status}`);
     }
 
-    const chats = await response.json();
+    const chats = result.data;
 
     if (!Array.isArray(chats) || chats.length === 0) {
       renderWelcomeMessage();
@@ -184,8 +186,10 @@ async function deleteChat() {
       },
     });
 
+    const result = await response.json();
+
     if (!response.ok) {
-      throw new Error(`Delete failed: ${response.status}`);
+      throw new Error(result.message || `Delete failed: ${response.status}`);
     }
 
     renderWelcomeMessage();
@@ -294,7 +298,6 @@ loadChatHistory();
 
   if (!fab || !panel || !backdrop) return;
 
-  // Only run on mobile
   function isMobile() { return window.innerWidth <= 768; }
 
   function openChat() {
@@ -322,7 +325,6 @@ loadChatHistory();
     closeChat();
   });
 
-  // ── Swipe down to close ──
   let startY = 0;
   let isDragging = false;
   let swipeAllowed = false;
@@ -332,7 +334,6 @@ loadChatHistory();
     startY = e.touches[0].clientY;
     isDragging = true;
 
-    // Only allow swipe-to-close if messages are scrolled to the top
     const msgs = document.getElementById('chatMessages');
     swipeAllowed = !msgs || msgs.scrollTop <= 0;
   }, { passive: true });
@@ -359,7 +360,6 @@ loadChatHistory();
     }
   }, { passive: true });
 
-  // ── Show badge when bot sends a new message while chat is closed ──
   const msgContainer = document.getElementById('chatMessages');
   if (msgContainer) {
     const observer = new MutationObserver(() => {

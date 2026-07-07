@@ -1,5 +1,7 @@
 import { API_BASE } from "../scripts/utils/config.js";
 
+export let products = [];
+
 export function getProduct(productId) {
   let matchingProduct;
 
@@ -11,9 +13,13 @@ export function getProduct(productId) {
   return matchingProduct;
 }
 
-export let products = [];
-
 export async function loadProducts() {
   const response = await fetch(`${API_BASE}/api/products/`);
-  products = await response.json();
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.message || 'Failed to load products');
+  }
+
+  products = result.data;
 }
