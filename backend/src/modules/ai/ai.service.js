@@ -2,6 +2,7 @@ import 'dotenv/config';
 import Groq from 'groq-sdk';
 import aiRepository from './ai.repository.js';
 import productRepository from '../products/product.repository.js';
+import AppError from '../../utils/app.error.js';
 import {
   SEARCH_FILTER_PROMPT,
   SEARCH_RESPONSE_PROMPT,
@@ -18,7 +19,7 @@ const model = 'llama-3.1-8b-instant';
 
 function sendEvent(res, event, payload) {
   if (!res || typeof res.write !== 'function') {
-    throw new Error('Invalid Express response object passed to sendEvent');
+    throw new AppError('Invalid Express response object passed to sendEvent', 500);
   }
 
   if (res.writableEnded) return;
@@ -45,22 +46,18 @@ async function getRecentConversationHistory(userId, limit = 6) {
   }
 }
 
+// Primary user-facing operation — must not hide failures.
 async function getChatHistory(userId) {
-  try {
-    const rows = (await aiRepository.getRecentHistory(userId, 50)) || [];
+  const rows = (await aiRepository.getRecentHistory(userId, 50)) || [];
 
-    return rows
-      .filter((item) => item && item.role && item.content)
-      .map((item) => ({
-        role: item.role === 'assistant' ? 'assistant' : 'user',
-        content: String(item.content),
-        created_at: item.created_at,
-      }))
-      .reverse();
-  } catch (error) {
-    console.error('Get chat history error:', error);
-    return [];
-  }
+  return rows
+    .filter((item) => item && item.role && item.content)
+    .map((item) => ({
+      role: item.role === 'assistant' ? 'assistant' : 'user',
+      content: String(item.content),
+      created_at: item.created_at,
+    }))
+    .reverse();
 }
 
 async function extractFilters(userMessage, prompt) {
@@ -85,19 +82,12 @@ async function extractFilters(userMessage, prompt) {
 }
 
 async function fetchProductsByFilters(filters) {
-  try {
-    // brand in repository is a single string ILIKE match
-    // if LLM returns brand array, join and use first brand for now
-    const normalizedFilters = {
-      ...filters,
-      brand: Array.isArray(filters.brand) ? filters.brand[0] : filters.brand,
-    };
+  const normalizedFilters = {
+    ...filters,
+    brand: Array.isArray(filters.brand) ? filters.brand[0] : filters.brand,
+  };
 
-    return await productRepository.getProducts(normalizedFilters);
-  } catch (error) {
-    console.error('Product fetch error:', error);
-    return [];
-  }
+  return await productRepository.getProducts(normalizedFilters);
 }
 
 async function streamLLMResponse(systemPrompt, userContent, res, history = []) {
@@ -261,6 +251,7 @@ async function handleAnalyzeMode(userMessage, userId, res) {
 }
 
 async function chat(userMessage, userId, res, mode = 'search') {
+  // Non-critical: message logging shouldn't block the chat response.
   try {
     await aiRepository.saveMessage(userId, 'user', userMessage);
   } catch (error) {

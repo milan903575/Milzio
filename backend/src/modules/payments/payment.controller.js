@@ -1,6 +1,5 @@
-// src/modules/payments/payment.controller.js
-
 import paymentService from './payment.service.js';
+import { sendSuccess } from '../../utils/response.helper.js';
 
 async function createGatewayOrder(req, res, next) {
   try {
@@ -11,12 +10,9 @@ async function createGatewayOrder(req, res, next) {
       Number(order_id)
     );
 
-    res.status(201).json({
-      message: 'Razorpay order created',
-      data: result,
-    });
-  } catch (error) {
-    next(error);
+    sendSuccess(res, 201, 'Razorpay order created', result);
+  } catch (err) {
+    next(err);
   }
 }
 
@@ -27,12 +23,9 @@ async function verifyPayment(req, res, next) {
       req.body
     );
 
-    res.status(200).json({
-      message: result.message,
-      data: result,
-    });
-  } catch (error) {
-    next(error);
+    sendSuccess(res, 200, result.message, result);
+  } catch (err) {
+    next(err);
   }
 }
 

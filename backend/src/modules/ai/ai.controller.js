@@ -1,11 +1,13 @@
 import aiService from './ai.service.js';
+import { sendSuccess } from '../../utils/response.helper.js';
+import AppError from '../../utils/app.error.js';
 
-async function chat(req, res) {
+async function chat(req, res, next) {
   const { message, mode } = req.body;
   const userId = req.user?.id;
 
   if (!message || !userId) {
-    return res.status(400).json({ message: 'Message and userId are required' });
+    return next(new AppError('Message and userId are required', 400));
   }
 
   try {
@@ -18,55 +20,51 @@ async function chat(req, res) {
     await aiService.chat(message, userId, res, mode);
 
     if (!res.writableEnded) {
-      return res.end();
+      res.end();
     }
   } catch (err) {
-    console.error('Chat error:', err);
-
     if (!res.headersSent) {
-      return res.status(500).json({ message: 'Something went wrong' });
+      return next(err);
     }
 
     if (!res.writableEnded) {
       res.write('event: error\n');
       res.write(`data: ${JSON.stringify({ message: 'Something went wrong' })}\n\n`);
-      return res.end();
+      res.end();
     }
   }
 }
 
-async function getChatHistory(req, res) {
-  const userId = req.user?.id;
-
-  if (!userId) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
+async function getChatHistory(req, res, next) {
   try {
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new AppError('Unauthorized', 401);
+    }
+
     const chats = await aiService.getChatHistory(userId);
-    return res.status(200).json(chats);
-  } catch (error) {
-    console.error('Get chat history error:', error);
-    return res.status(500).json({ message: 'Something went wrong' });
+    sendSuccess(res, 200, 'Chat history fetched', chats);
+  } catch (err) {
+    next(err);
   }
 }
 
-async function deleteChat(req, res) {
-  const userId = req.user?.id;
-
-  if (!userId) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
+async function deleteChat(req, res, next) {
   try {
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new AppError('Unauthorized', 401);
+    }
+
     const result = await aiService.deleteChat(userId);
-    return res.status(200).json({
-      message: result.deleted ? 'Chat deleted successfully' : 'No chat found to delete',
-      ...result,
-    });
-  } catch (error) {
-    console.error('Delete chat error:', error);
-    return res.status(500).json({ message: 'Something went wrong' });
+    sendSuccess(
+      res,
+      200,
+      result.deleted ? 'Chat deleted successfully' : 'No chat found to delete',
+      result
+    );
+  } catch (err) {
+    next(err);
   }
 }
 

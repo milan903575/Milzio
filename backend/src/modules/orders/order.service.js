@@ -1,20 +1,21 @@
 import pool from '../../config/db.js';
 import orderRepository from './order.repository.js';
 import cartRepository from '../carts/cart.repository.js';
+import AppError from '../../utils/app.error.js';
 
 async function createOrder(userId) {
   const cartItems = await cartRepository.getCartItemsByUserId(userId);
 
   if (!cartItems || cartItems.length === 0) {
-    throw { status: 400, message: 'Your cart is empty' };
+    throw new AppError('Your cart is empty', 400);
   }
 
   for (const item of cartItems) {
     if (item.stock < item.quantity) {
-      throw {
-        status: 400,
-        message: `"${item.name}" only has ${item.stock} units left. Please update your cart.`,
-      };
+      throw new AppError(
+        `"${item.name}" only has ${item.stock} units left. Please update your cart.`,
+        400
+      );
     }
   }
 
@@ -67,7 +68,7 @@ async function getOrderById(orderId, userId) {
   const order = await orderRepository.getOrderById(orderId, userId);
 
   if (!order) {
-    throw { status: 404, message: 'Order not found' };
+    throw new AppError('Order not found', 404);
   }
 
   return order;

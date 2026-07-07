@@ -3,6 +3,7 @@ import Razorpay from 'razorpay';
 import paymentRepository from './payment.repository.js';
 import orderService from '../orders/order.service.js';
 import cartRepository from '../carts/cart.repository.js';
+import AppError from '../../utils/app.error.js';
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -13,10 +14,7 @@ async function createGatewayOrder(userId, orderId) {
   const order = await orderService.getOrderById(orderId, userId);
 
   if (order.status !== 'pending') {
-    throw {
-      status: 400,
-      message: 'Payment can only be started for pending orders',
-    };
+    throw new AppError('Payment can only be started for pending orders', 400);
   }
 
   const razorpayOrder = await razorpay.orders.create({
@@ -72,7 +70,7 @@ async function verifyAndFinalizePayment(userId, payload) {
     !razorpay_payment_id ||
     !razorpay_signature
   ) {
-    throw { status: 400, message: 'Missing payment verification fields' };
+    throw new AppError('Missing payment verification fields', 400);
   }
 
   const payment = await paymentRepository.getPaymentByRazorpayOrderId(
@@ -80,7 +78,7 @@ async function verifyAndFinalizePayment(userId, payload) {
   );
 
   if (!payment || payment.user_id !== userId || payment.order_id !== Number(order_id)) {
-    throw { status: 404, message: 'Payment record not found' };
+    throw new AppError('Payment record not found', 404);
   }
 
   if (payment.status === 'paid') {
@@ -99,13 +97,13 @@ async function verifyAndFinalizePayment(userId, payload) {
 
   if (!isValid) {
     await paymentRepository.markPaymentFailed(payment.id);
-    throw { status: 400, message: 'Invalid payment signature' };
+    throw new AppError('Invalid payment signature', 400);
   }
 
   const order = await orderService.getOrderById(payment.order_id, userId);
 
   if (order.status !== 'pending') {
-    throw { status: 400, message: 'Order is not in payable state' };
+    throw new AppError('Order is not in payable state', 400);
   }
 
   const cart = await cartRepository.getOrCreateCart(userId);

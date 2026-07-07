@@ -1,5 +1,6 @@
 import cartRepository from './cart.repository.js';
 import productRepository from '../products/product.repository.js';
+import AppError from '../../utils/app.error.js';
 
 async function getCart(userId) {
   const items = await cartRepository.getCartItemsByUserId(userId);
@@ -19,22 +20,22 @@ async function getCart(userId) {
 
 async function addItem(userId, productId, quantity) {
   if (!productId || !quantity || quantity < 1) {
-    throw { status: 400, message: 'Invalid product or quantity' };
+    throw new AppError('Invalid product or quantity', 400);
   }
 
   const products = await productRepository.getProducts({ id: productId });
   const product = products[0] || null;
 
   if (!product) {
-    throw { status: 404, message: 'Product not found' };
+    throw new AppError('Product not found', 404);
   }
 
   if (product.stock < 1) {
-    throw { status: 400, message: 'Product is out of stock' };
+    throw new AppError('Product is out of stock', 400);
   }
 
   if (quantity > product.stock) {
-    throw { status: 400, message: `Only ${product.stock} units available` };
+    throw new AppError(`Only ${product.stock} units available`, 400);
   }
 
   const cart = await cartRepository.getOrCreateCart(userId);
@@ -44,10 +45,10 @@ async function addItem(userId, productId, quantity) {
     const newQuantity = existing.quantity + quantity;
 
     if (newQuantity > product.stock) {
-      throw {
-        status: 400,
-        message: `Only ${product.stock} units available. You already have ${existing.quantity} in cart.`,
-      };
+      throw new AppError(
+        `Only ${product.stock} units available. You already have ${existing.quantity} in cart.`,
+        400
+      );
     }
 
     return await cartRepository.updateCartItemQuantity(existing.id, newQuantity);
@@ -58,24 +59,21 @@ async function addItem(userId, productId, quantity) {
 
 async function updateItem(userId, itemId, quantity) {
   if (!quantity || quantity < 1) {
-    throw { status: 400, message: 'Quantity must be at least 1' };
+    throw new AppError('Quantity must be at least 1', 400);
   }
 
   const cart = await cartRepository.getOrCreateCart(userId);
   const item = await cartRepository.getCartItem(itemId, cart.id);
 
   if (!item) {
-    throw { status: 404, message: 'Cart item not found' };
+    throw new AppError('Cart item not found', 404);
   }
 
   const products = await productRepository.getProducts({ id: item.product_id });
   const product = products[0] || null;
 
   if (!product || quantity > product.stock) {
-    throw {
-      status: 400,
-      message: `Only ${product?.stock ?? 0} units available`,
-    };
+    throw new AppError(`Only ${product?.stock ?? 0} units available`, 400);
   }
 
   return await cartRepository.updateCartItemQuantity(itemId, quantity);
@@ -86,7 +84,7 @@ async function removeItem(userId, itemId) {
   const deleted = await cartRepository.removeCartItem(itemId, cart.id);
 
   if (!deleted) {
-    throw { status: 404, message: 'Cart item not found' };
+    throw new AppError('Cart item not found', 404);
   }
 
   return deleted;

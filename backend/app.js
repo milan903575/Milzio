@@ -3,6 +3,7 @@ import cors from 'cors';
 import path from 'path';
 import logger from './src/middleware/logger.middleware.js';
 import router from './src/router.js';
+import errorHandler from './src/middleware/error.middleware.js';
 import 'dotenv/config';
 import './src/config/db.js';
 
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use('/api', logger.consoleLogger, logger.fileLogger);
 app.use('/uploads', express.static(path.resolve('uploads')));
 app.use('/api', router);
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`App is listening on port ${port}`);

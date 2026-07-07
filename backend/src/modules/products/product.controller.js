@@ -1,36 +1,46 @@
 import productService from './product.service.js';
+import { sendSuccess } from '../../utils/response.helper.js';
 
-async function getAllProducts(req, res) {
-  const products = await productService.getAllProducts();
-  return res.status(200).json(products);
+async function getAllProducts(req, res, next) {
+  try {
+    const products = await productService.getAllProducts();
+    return sendSuccess(res, 200, 'Products fetched', products);
+  } catch (err) {
+    next(err);
+  }
 }
 
-async function getProducts(req, res) {
-  const { id, name, brand, category, minPrice, maxPrice, keywords } = req.query;
-
-  const products = await productService.getProducts({ id, name, brand, category, minPrice, maxPrice, keywords });
-  return res.status(200).json(products);
+async function getProducts(req, res, next) {
+  try {
+    const { id, name, brand, category, minPrice, maxPrice, keywords } = req.query;
+    const products = await productService.getProducts({ id, name, brand, category, minPrice, maxPrice, keywords });
+    return sendSuccess(res, 200, 'Products fetched', products);
+  } catch (err) {
+    next(err);
+  }
 }
 
-async function getProduct(req, res) {
-  const { id } = req.params;
-  const product = await productService.getProductById(id);
-  if (!product) return res.status(404).json({
-    message: 'Product not found'
-  });
-  return res.status(200).json(product);
+async function getProduct(req, res, next) {
+  try {
+    const { id } = req.params;
+    const product = await productService.getProductById(id);
+    return sendSuccess(res, 200, 'Product fetched', product);
+  } catch (err) {
+    next(err);
+  }
 }
 
-async function createProduct(req, res) {
-  const data = req.body;
-  await productService.createProduct(data);
-  return res.status(201).json({
-    message: 'Product created',
-    data: {
+async function createProduct(req, res, next) {
+  try {
+    const data = req.body;
+    await productService.createProduct(data);
+    return sendSuccess(res, 201, 'Product created', {
       name: data.name,
       price: data.price_cents
-    }
-  });
+    });
+  } catch (err) {
+    next(err);
+  }
 }
 
 const productController = {
