@@ -18,6 +18,17 @@
   align-items: stretch;
 }
 
+.products-status {
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background-color: #f6f7f8;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  color: #444;
+  font-size: 14px;
+  display: none;
+}
+
 @media (max-width: 1600px) {
   .products-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));

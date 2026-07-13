@@ -2,11 +2,35 @@ import { addToCart, totalItemsInCart, loadFromStorage } from '../data/cart.js';
 import { products, loadProducts } from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
 
+const productsGrid = document.querySelector('.js-products-grid');
+const statusElement = document.querySelector('.js-products-status');
+
 (async () => {
-  await loadProducts();
-  await loadFromStorage();
-  renderProductsGrid();
+  try {
+    showStatus('Loading… The server is waking up. This may take a few seconds.');
+
+    await loadProducts();
+    await loadFromStorage();
+
+    renderProductsGrid();
+    hideStatus();
+  } catch (error) {
+    console.error('Initial load failed:', error.message);
+    showStatus(error.message || 'Could not load products. Please refresh and try again.');
+  }
 })();
+
+function showStatus(message) {
+  if (!statusElement) return;
+  statusElement.textContent = message;
+  statusElement.style.display = 'block';
+}
+
+function hideStatus() {
+  if (!statusElement) return;
+  statusElement.textContent = '';
+  statusElement.style.display = 'none';
+}
 
 function renderProductsGrid() {
   const productsHTML = products.map((product) => {
@@ -53,6 +77,7 @@ function renderProductsGrid() {
             class="product-rating-stars"
             loading="lazy"
             src="images/ratings/rating-${Math.round(product.rating_stars * 2) * 5}.png"
+            alt="${product.rating_stars} stars"
           >
           <div class="product-rating-count link-primary">
             ${product.rating_count}
@@ -76,7 +101,7 @@ function renderProductsGrid() {
         <div class="product-spacer"></div>
 
         <div class="added-to-cart js-added-to-cart-${product.id}">
-          <img src="images/icons/checkmark.png">
+          <img src="images/icons/checkmark.png" alt="">
           Added
         </div>
 
@@ -90,7 +115,7 @@ function renderProductsGrid() {
     `;
   }).join('');
 
-  document.querySelector('.js-products-grid').innerHTML = productsHTML;
+  productsGrid.innerHTML = productsHTML;
   updateCartQuantity();
 
   document.querySelectorAll('.js-add-to-cart').forEach((button) => {
