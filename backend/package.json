@@ -26,7 +26,8 @@
     "morgan": "^1.10.1",
     "nodemon": "^3.1.14",
     "pg": "^8.21.0",
-    "razorpay": "^2.9.6"
+    "razorpay": "^2.9.6",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "node-pg-migrate": "^8.0.4"
